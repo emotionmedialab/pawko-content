@@ -9,7 +9,7 @@ Sources: `README.md` ("0. Install the tools"), `PLAYBOOK-DOG-APP.md` (section 1,
 git clone https://github.com/emotionmedialab/pawko-content.git cartoon-short-kit
 cd cartoon-short-kit
 ```
-- Git holds the code and docs only. **Big media comes from the Drive folder:** reference reels, voices/music/SFX (`*.mp3`, `*.wav`), finals (`*.mp4`), the realistic character images.
+- Git holds the code and docs only. **Big media comes from the Drive folder "Pawko Build Media" (https://drive.google.com/drive/folders/12Q3Rk8kJ48NtVEosThDbMoorPC4AGR4t):** reference reels, voices/music/SFX (`*.mp3`, `*.wav`), finals (`*.mp4`), the realistic character images.
 - Open `cartoon-short-kit/` as the project folder in Claude Code (that is where `/pawko-video` lives).
 
 ## 2. Install
