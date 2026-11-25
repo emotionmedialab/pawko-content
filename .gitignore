@@ -18,3 +18,7 @@ example/*/stills/
 *.mp4
 example/*/web/lib/three.module.js
 *.log
+
+# Pawko: review sheets, test stills and frame dumps in project work/ folders (regenerable)
+example/*/work/**/*.jpg
+example/*/work/**/*.png

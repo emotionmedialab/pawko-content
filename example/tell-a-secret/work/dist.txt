@@ -1,0 +1,12 @@
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+export const dofAt = (f) => {
+  const S = shotAt(f), C = camAt(f), head = REF.sit ? REF.sit.head : [0.2, 0.4, 0];
+  if (S.id === 'hook' || S.id === 'yes') return { focus: dist(C.pos, [0.3, 0.35, -0.15]), cinf: 6 };
+  if (S.id === 'setup') return { focus: dist(C.pos, C.look), cinf: 7 };
+  if (S.id === 'skip2' || S.id === 'keep') return { focus: dist(C.pos, [0.1, 0.22, 0]), cinf: 9 };
+  if (S.id === 'lift') return { focus: dist(C.pos, [0.18, 0.2, 0]), cinf: 8 };
+  if (S.id === 'popUp') return { focus: dist(C.pos, [0.1, 0.3, 0]), cinf: 6 };
+  if (S.id === 'longer' || S.id === 'fix') return { focus: dist(C.pos, [0.12, 0.2, 0]), cinf: 4 };
+  return { focus: dist(C.pos, head), cinf: 6 };
+};
+

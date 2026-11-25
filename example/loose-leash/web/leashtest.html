@@ -1,0 +1,30 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="1800" height="1200"></canvas>
+<script type="module">
+import * as THREE from './lib/three.module.js';
+import { GLTFLoader } from './lib/jsm/GLTFLoader.js';
+import { makeDog } from './dogrig.js';
+import { makeLeash } from './leash.js';
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true }); r.setSize(1800, 1200, false); r.setScissorTest(true);
+const g = await new GLTFLoader().loadAsync('models/dog-puppy.glb');
+const dog = makeDog(g, { scale: 1.6 });
+const grad = (() => { const d = new Uint8Array([90, 90, 90, 255, 255, 255, 255, 255]); const t = new THREE.DataTexture(d, 2, 1); t.minFilter = t.magFilter = THREE.NearestFilter; t.needsUpdate = true; return t; })();
+const toon = (o) => new THREE.MeshToonMaterial({ gradientMap: grad, ...o });
+g.scene.traverse((o) => { if (o.isMesh) { const map = o.material.map; if (map) map.colorSpace = THREE.SRGBColorSpace; o.material = new THREE.MeshToonMaterial({ gradientMap: grad, map, color: '#fff4ea', side: THREE.DoubleSide }); o.frustumCulled = false; } });
+const sc = new THREE.Scene(); sc.background = new THREE.Color('#cfe0e8'); sc.add(dog.root);
+const L = makeLeash(THREE, sc, dog, { toon });
+sc.add(new THREE.HemisphereLight('#fff', '#777', 1.6)); const sun = new THREE.DirectionalLight('#fff', 2); sun.position.set(2, 4, 3); sc.add(sun);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), new THREE.MeshBasicMaterial({ color: '#b9a27c' })); floor.rotation.x = -Math.PI / 2; sc.add(floor);
+const P = JSON.parse(decodeURIComponent(location.hash.slice(1)) || '[]');
+const cols = +(new URLSearchParams(location.search).get('cols') || 4), cw = 1800 / cols, ch = +(new URLSearchParams(location.search).get('ch') || 400), rows = Math.ceil(P.length / cols);
+r.setSize(1800, ch * rows, false);
+P.forEach((o, i) => {
+  dog.root.position.set(0, 0, 0); dog.root.rotation.set(0, o.yaw ?? Math.PI / 2, 0);
+  if (o.look) o.look = new THREE.Vector3(...o.look);
+  dog.pose(o); dog.root.updateMatrixWorld(true);
+  L.update({ hand: o.hand, slack: o.slack, col: o.col, f: 0 });
+  const cam = new THREE.PerspectiveCamera(o.fov || 34, cw / ch, 0.01, 50); cam.position.set(...o.cam); cam.lookAt(...(o.at || [0, 0.2, 0]));
+  const x = (i % cols) * cw, y = ch * rows - (Math.floor(i / cols) + 1) * ch;
+  r.setViewport(x, y, cw, ch); r.setScissor(x, y, cw, ch); r.render(sc, cam);
+});
+window.done = 1;
+</script></body></html>

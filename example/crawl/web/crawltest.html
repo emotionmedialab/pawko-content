@@ -1,0 +1,12 @@
+<!doctype html><html><body><canvas id="c" width="64" height="64"></canvas>
+<script type="module">
+import * as THREE from './lib/three.module.js';
+import { GLTFLoader } from './lib/jsm/GLTFLoader.js';
+import { makeDog } from './dogrig.js';
+const g = await new GLTFLoader().loadAsync('models/dog-puppy.glb');
+const dog = makeDog(g, { scale: 1.6 });
+const P = await (await fetch('ct.json')).json();
+const f = (v) => v.toArray().map((x) => +x.toFixed(3)).join(',');
+P.forEach((o, i) => { dog.pose(o); console.log(i, JSON.stringify(o.w) + JSON.stringify(o.crawl || ''), 'flS', f(dog.boneWorld('flS')), 'flE', f(dog.boneWorld('flE')), 'flW', f(dog.boneWorld('flW')), 'flB', f(dog.boneWorld('flB')), 'frB', f(dog.boneWorld('frB')), 'root', f(dog.boneWorld('root')), 'hlB', f(dog.boneWorld('hlB')), 'hlK', f(dog.boneWorld('hlK')), 'hlJ', f(dog.boneWorld('hlJ')), 'hlA', f(dog.boneWorld('hlA')), 'top', f(dog.boneWorld('top'))); });
+window.done = 1;
+</script></body></html>

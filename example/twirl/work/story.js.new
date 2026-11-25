@@ -1,0 +1,295 @@
+// "Twirl" — a spin the OTHER way from Spin: lure, full turn, empty hand, cue, mixing with spin, the wrong-way mistake, a different word and hand. 3D puppy walking real circles + the 2D trainer, 1200 frames, timed to voice.mp3 (Holden).
+// Word frames (voice.mp3, round(s*30); sentence starts from silencedetect silence_end):
+// Let's 0 twirl 29 | the 59 other 62 way 69 spin 83 | Grab 133 non 164 floor 184 | Hold 220 treat 227 nose 247 | Move 287 circle 312 height 344 |
+// the 372 opposite 374 spin 403 | When 450 full 483 turn 489 | reward 515 | After 562 | make 602 empty 638 hand 646 | reward 669 other 694 hand 700 |
+// Now 737 say 742 twirl 761 just 784 motion 805 | Then 836 mix 845 spin 862 | If 909 wrong 937 | your 973 cues 982 alike 1015 | Use 1053 word 1068 hand 1090 |
+// Say 1120 yes 1125 or 1137 click 1152 | then 1167 reward 1177 | end 1199.
+// Turn direction: Spin (James's video) is counter-clockwise on screen seen from above; Twirl is CLOCKWISE (heading +x -> +z -> -x -> -z, yaw decreasing).
+// RE-TIME (real narrator): run transcribe.py on the new voice, update TOTAL and the word table `w` below.
+// Hard cuts only, no flashes. Puppy at the origin, nose toward +x. Cameras are dog-down-ii's keys (hook, setup, POV, stand 3/4, popUp side, yes, final): only look-at targets and timing change.
+import { M, camFromKeys, idle, blinkAt, q, clamp, lerp, lerp3, ramp, spline } from './motion.js';
+import { trainerShoulder } from './toon.js';
+import { VENV } from './voiceenv.js';
+export const FPS = 30, TOTAL = 1200, DECK = 0;
+const w = {
+  twirl1: 29, grab: 133, nonslip: 164, floor1: 184, hold: 220, nose1: 247, move: 287, circle: 312, opp: 374, spin2: 403, when: 450, full: 483, turn: 489, reward1: 515,
+  after: 562, make: 602, empty: 638, reward2: 669, other: 694, now: 737, say: 742, twirl2: 761, motion: 805, then: 836, mix: 845, spin3: 862,
+  if: 909, wrong: 937, cues: 982, alike: 1015, use: 1053, word: 1068, hand2: 1090, say2: 1120, yes: 1125, click: 1152, then2: 1167, reward3: 1177, end: TOTAL - 1,
+};
+export const SHOTS = [
+  { id: 'hook', a: 0, b: w.grab - 1, light: 'day' },              // trainer + puppy: it twirls on "twirl"
+  { id: 'setup', a: w.grab, b: w.hold - 1, light: 'day' },        // jar, hard cut to the puppy on the mat, check on "non-slip floor"
+  { id: 'hold', a: w.hold, b: w.move - 1, light: 'day' },         // POV: treat at the nose
+  { id: 'circle', a: w.move, b: w.when - 1, light: 'day' },       // floating: paw cursor circles at nose height, clockwise; the puppy walks a full turn
+  { id: 'turn', a: w.when, b: w.after - 1, light: 'day' },        // floating: the full turn finishes, reward, check
+  { id: 'fade', a: w.after, b: w.now - 1, light: 'day' },         // POV hands: empty hand circle, the other hand rewards
+  { id: 'cue', a: w.now, b: w.then - 1, light: 'day' },           // "Twirl!" bubble, then the palm circle
+  { id: 'mix', a: w.then, b: w.if - 1, light: 'day' },            // twirl then spin (both bubbles)
+  { id: 'mistake', a: w.if, b: w.use - 1, light: 'day' },         // MISTAKE: the cursor circles clockwise, the puppy turns counter-clockwise (red cross)
+  { id: 'fix', a: w.use, b: w.say2 - 1, light: 'day' },           // a different hand (pointing finger): correct turn, check
+  { id: 'yes', a: w.say2, b: w.then2 - 1, light: 'golden' },      // trainer: "yes" + click
+  { id: 'final', a: w.then2, b: TOTAL - 1, light: 'golden' },     // POV: reward, confetti
+];
+export const shotAt = (f) => SHOTS.find((s) => f >= s.a && f <= s.b) || SHOTS[SHOTS.length - 1];
+const sm = M.smooth;
+const KF = (f, keys, ease = sm) => {
+  if (f <= keys[0][0]) return keys[0][1];
+  for (let i = 0; i < keys.length - 1; i++) { const [fa, va] = keys[i], [fb, vb] = keys[i + 1]; if (f <= fb) { const t = ease((f - fa) / (fb - fa)); return Array.isArray(va) ? va.map((v, k) => lerp(v, vb[k], t)) : lerp(va, vb, t); } }
+  return keys[keys.length - 1][1];
+};
+const add = (a, b) => a.map((v, i) => v + b[i]);
+const chompAt = (f, t0, n = 14) => (f >= t0 && f < t0 + n ? Math.abs(Math.sin((f - t0) * 0.75)) : 0);
+const R = (f, a, b) => sm(ramp(f, a, b));
+
+// ---------- lights ----------
+export const LIGHTS = {
+  day: { az: 135, el: 50, sky: '#c4d6f2', ground: '#8a8262', hemi: 1.2, sun: '#fff1dc', sunI: 2.4, fog: '#cadcf0', fogNear: 60, fogFar: 700,
+    skyTop: '#3f80d4', skyHor: '#c3daf2', sat: 1.08, vig: 0.2, shadowExt: 3 },
+  golden: { az: 120, el: 30, sky: '#ffe8cc', ground: '#8a7a62', hemi: 1.2, sun: '#ffe2bc', sunI: 2.4, fog: '#f4d6b0', fogNear: 60, fogFar: 650,
+    skyTop: '#6f8fd8', skyHor: '#ffd2a0', sat: 1.04, vig: 0.24, shadowExt: 3, gain: '#fffaf2' },
+};
+export const lightFor = (S) => ({ ...LIGHTS[S.light] });
+
+// ---------- staging ----------
+const MAT = 0.064, K = 0.00225, ST = 1.08;
+const DOGPOS = [0, MAT, 0], TH0 = Math.PI / 2;           // puppy on the mat, nose toward +x (yaw pi/2)
+const TRN = [0.52, MAT, -0.66];
+const HOOKP = [0.12, MAT, -0.48];
+const CIRC = 0.05, STRIDE = 0.15;                           // walking circle radius (m), metres per gait cycle
+let CUR = [0, 1, 3], TCUR = TRN;
+const REF = {};
+export const calibrate = (poseFn, root) => {
+  root.position.set(...DOGPOS); root.rotation.set(0, TH0, 0); root.updateMatrixWorld(true);
+  REF.stand = poseFn({ w: { stand: 1 }, look: [3, 0.3, 0] });
+  root.position.set(...DOGPOS);
+};
+const NOSE = () => REF.stand.nose;
+const HEAD = () => add(REF.stand.head, [0.02, 0.12, 0]);
+const MOUTH = () => add(NOSE(), [0.1, -0.06, 0.06]);       // treat delivered to the standing puppy
+
+// ---------- the turns: [start, end, s] s = +1 clockwise (twirl), -1 counter-clockwise (spin); each is one full circle that ends where it started ----------
+const SEGS = [
+  [w.twirl1, w.twirl1 + 56, 1],                      // hook
+  [w.move + 14, w.when - 10, 1],                     // lure circle (slow)
+  [w.when + 2, w.when + 52, 1],                      // finishes the full turn, reward follows
+  [w.after + 44, w.reward2 - 6, 1],                  // empty hand circle
+  [w.twirl2 + 38, w.then - 2, 1],                    // after the cue
+  [w.then + 2, w.then + 30, 1],                      // mix: twirl ...
+  [w.then + 36, w.if - 4, -1],                       // ... then spin
+  [w.if + 14, w.if + 70, -1],                        // MISTAKE: wrong way
+  [w.use + 2, w.use + 46, 1],                        // fix
+];
+const baseAt = (f) => (shotAt(f).id === 'hook' ? HOOKP : DOGPOS);
+const stateAt = (f) => {
+  const base = baseAt(f), sg = SEGS.find((x) => f >= x[0] && f <= x[1]);
+  if (!sg) return { pos: base, th: TH0, h: [1, 0], p: 0, moving: false, dist: 0, k: 0 };
+  const [a, b, s] = sg, p = sm(ramp(f, a, b)), th = TH0 - s * 2 * Math.PI * p;
+  const rt = (t) => [-Math.cos(t), Math.sin(t)];                  // right-hand vector of heading (sin t, cos t) in (x, z)
+  const r0 = rt(TH0), r = rt(th), cx = base[0] + s * CIRC * r0[0], cz = base[2] + s * CIRC * r0[1];
+  return { pos: [cx - s * CIRC * r[0], MAT, cz - s * CIRC * r[1]], th, h: [Math.sin(th), Math.cos(th)], p, moving: true, dist: CIRC * 2 * Math.PI * p, k: clamp(Math.sin(Math.PI * p) * 1.6) };
+};
+// where the lure / empty hand is: ahead of the puppy's nose at nose height
+const leadBase = (f) => { const S = stateAt(f), d = NOSE()[0] + 0.12, r = [-S.h[1], S.h[0]], fc = Math.max(0, S.h[0] * 0.89 + S.h[1] * 0.45), sd = 0.09 + 0.1 * fc;   // ahead of the nose and to the dog's right; further out when the dog faces the camera so the cursor never sits on its face
+  return [S.pos[0] + S.h[0] * d + r[0] * sd, NOSE()[1] - 0.06 - 0.03 * fc, S.pos[2] + S.h[1] * d + r[1] * sd]; };
+
+// screen-space check: keep the cursor off the puppy's head (it sits on the face when the puppy looks at the camera). Pushed sideways (camera right, or left near the frame edge), eased over 8 frames.
+const SCR = { w: 1080, h: 1920, edge: 60, headR: 0.11, ease: 8 };
+const toScr = (c, P) => { const F = c.look.map((v, i) => v - c.pos[i]), n = Math.hypot(...F), z0 = F.map((v) => v / n), rl = Math.hypot(z0[2], z0[0]), Rt = [-z0[2] / rl, 0, z0[0] / rl], U = [z0[1] * Rt[2] - z0[2] * Rt[1], z0[2] * Rt[0] - z0[0] * Rt[2], z0[0] * Rt[1] - z0[1] * Rt[0]];
+  const d = P.map((v, i) => v - c.pos[i]), z = d[0] * z0[0] + d[1] * z0[1] + d[2] * z0[2], fl = SCR.h / 2 / Math.tan(c.fov * Math.PI / 360);
+  return { x: SCR.w / 2 + fl * (d[0] * Rt[0] + d[2] * Rt[2]) / z, y: SCR.h / 2 - fl * (d[0] * U[0] + d[1] * U[1] + d[2] * U[2]) / z, fl, z, Rt }; };
+const headAt = (f) => { const S = stateAt(f), a = S.th - TH0, o = add(HEAD(), [-DOGPOS[0], -DOGPOS[1], -DOGPOS[2]]);
+  return [S.pos[0] + o[0] * Math.cos(a) + o[2] * Math.sin(a), S.pos[1] + o[1], S.pos[2] - o[0] * Math.sin(a) + o[2] * Math.cos(a)]; };
+const needPx = (g, P) => { const c = camAt(g), p = toScr(c, P), h = toScr(c, headAt(g)), r = SCR.headR * h.fl / h.z, dx = p.x - h.x, dy = p.y - h.y;
+  if (Math.hypot(dx, dy) >= 1.6 * r || Math.abs(dy) >= 2 * r) return 0;
+  const run = Math.sqrt(4 * r * r - dy * dy), sg = h.x + run < SCR.w - SCR.edge ? 1 : -1;   // clear the head by ~0.5 radii (cursor ~2 radii from its centre)
+  return sg * Math.max(0, sg * (h.x + sg * run - p.x)); };
+const clearHead = (f, base) => { const S = shotAt(f); let best = 0;
+  for (let g = Math.max(S.a, f - SCR.ease); g <= Math.min(S.b, f + SCR.ease); g++) { const px = needPx(g, base(g)) * (1 - Math.abs(g - f) / (SCR.ease + 1)); if (Math.abs(px) > Math.abs(best)) best = px; }
+  if (!best) return base(f);
+  const c = camAt(f), P = base(f), t = toScr(c, P); return add(P, t.Rt.map((v) => v * best * t.z / t.fl)); };
+const leadAt = (f) => clearHead(f, leadBase);
+
+// ---------- the puppy ----------
+export const dog3At = (f) => {
+  const S = shotAt(f), st = stateAt(f);
+  const flick = Math.max(0, Math.sin(f * 0.11 + 1)) ** 12;
+  const base = { pos: st.pos, yaw: st.th, w: { stand: 1 }, roll: 0, blink: blinkAt(f, 8) ? 1 : 0, breath: 0.25 + 0.25 * Math.sin(f * 0.2), wag: 0.4 * Math.sin(f * 0.25), tail: 0.1, neck: 0.5, ears: -0.25 * flick,
+    gait: st.moving ? { phase: st.dist / STRIDE, amp: 30, lift: 1.1, k: st.k } : undefined };
+  const W = worldAt(f), lead = leadAt(f);
+  const happy = { wag: Math.sin(f * 0.8) * 1.1, tail: 0.35 };
+  const lk = (P, dy = 0) => [P[0], Math.min(P[1] + dy, 0.34), P[2]];
+  const sway = { pos: add(st.pos, [0.004 * Math.sin(f * 0.037), 0, 0.004 * Math.sin(f * 0.029 + 1)]) };
+  switch (S.id) {
+    case 'hook': return { ...base, ...(st.moving ? {} : sway), pos: st.moving ? st.pos : add(HOOKP, [0.004 * Math.sin(f * 0.037), 0, 0]), look: st.moving ? add(st.pos, [st.h[0], 0.3, st.h[1]]) : [0.5, 0.5, TRN[2]], ...(f > w.twirl1 + 50 ? happy : { wag: 0.6 * Math.sin(f * 0.4) }) };
+    case 'setup': return { ...base, ...sway, look: [1.6, 0.05 + 0.03 * Math.sin(f * 0.05), 0.3], headTilt: 10 * Math.sin(Math.PI * ramp(f, w.nonslip, w.nonslip + 40)), wag: 0.7 * Math.sin(f * 0.5), tail: 0.25, ears: -0.2 };
+    case 'hold': return { ...base, ...sway, look: W.treat || lead, headTilt: 6 * Math.sin(f * 0.045), wag: 0.7 * Math.sin(f * 0.3), ears: -0.25 + 0.3 * Math.sin(f * 0.07) };
+    case 'circle': return { ...base, look: lk(lead), ...(st.moving ? {} : { ...sway.pos ? sway : {}, wag: 0.6 * Math.sin(f * 0.4) }), headTilt: st.moving ? 0 : 6 * Math.sin(f * 0.05) };
+    case 'turn': {
+      const ch = chompAt(f, w.reward1);
+      return { ...base, ...(st.moving ? {} : sway), look: W.treat && !W.treatHide ? lk(W.treat, 0.02) : lk(lead), jaw: f >= w.reward1 + 14 ? 0.3 : ch, ...(f > w.reward1 ? happy : {}), blink: f > w.reward1 && f < w.reward1 + 6 ? 1 : base.blink };
+    }
+    case 'fade': {
+      const ch = chompAt(f, w.reward2 + 8);
+      return { ...base, ...(st.moving ? {} : sway), look: W.treat && !W.treatHide ? lk(W.treat, 0.02) : lk(lead), jaw: f >= w.reward2 + 22 ? 0.3 : ch, ...(f > w.reward2 + 8 ? happy : {}), blink: f > w.reward2 + 8 && f < w.reward2 + 14 ? 1 : base.blink };
+    }
+    case 'cue': {
+      const perk = f >= w.twirl2 - 2 && f < w.twirl2 + 24 ? -0.7 * Math.sin(Math.PI * ramp(f, w.twirl2 - 2, w.twirl2 + 24)) : 0;
+      const side = f >= w.twirl2 - 4 && f < w.twirl2 + 26 ? 0.6 * Math.sin(Math.PI * ramp(f, w.twirl2 - 4, w.twirl2 + 26)) : 0;   // the head turns to the sound
+      return { ...base, ...(st.moving ? {} : sway), look: st.moving ? lk(lead) : [1.2, 0.2, 0.15 + side], ears: perk - 0.2, wag: 0.5 * Math.sin(f * 0.4) };
+    }
+    case 'mix': return { ...base, look: lk(lead), ...(st.moving ? {} : { wag: 0.6 * Math.sin(f * 0.4) }) };
+    case 'mistake': return { ...base, ...(st.moving ? {} : sway), look: f > w.if + 70 ? lk(W.paw.pos) : lk(lead), headTilt: !st.moving && f > w.if + 70 ? 12 * Math.sin((f - w.if - 70) * 0.09) : 0, ears: !st.moving && f > w.if + 70 ? -0.4 + 0.3 * Math.sin(f * 0.13) : base.ears, wag: st.moving ? base.wag : 0.15 * Math.sin(f * 0.2) };
+    case 'fix': {
+      return { ...base, ...(st.moving ? {} : sway), look: lk(lead), ...(f > w.use + 56 ? happy : {}) };
+    }
+    case 'yes': return { ...base, ...sway, look: [TRN[0] + 0.1, 0.3, TRN[2] + 0.35], wag: Math.sin(f * 0.9) * 1.3, tail: 0.4, ears: f > w.click - 2 && f < w.click + 8 ? -0.5 : 0, jaw: f > w.yes && f < w.yes + 16 ? 0.5 : 0.2 };
+    case 'final': {
+      const t0 = w.reward3 + 2, ch = f >= t0 && f < t0 + 16 ? Math.abs(Math.sin((f - t0) * 0.75)) : f >= t0 + 16 ? 0.35 : 0;
+      return { ...base, ...sway, look: W.treat && !W.treatHide ? lk(W.treat, 0.02) : lk(lead), jaw: ch, wag: Math.sin(f * 0.9) * 1.3, tail: 0.4, blink: f > t0 + 1 && f < t0 + 9 ? 1 : base.blink };
+    }
+  }
+  return base;
+};
+
+// ---------- 3D props: POV hands / paw cursor + biscuit ----------
+// a hand waiting / leaving: low on the mat in front of the camera, below the frame (hidden while parked)
+const BELOW = (f, P) => { const c = camAt(f), fw = [c.look[0] - c.pos[0], c.look[2] - c.pos[2]], n = Math.hypot(fw[0], fw[1]), F = [fw[0] / n, fw[1] / n], R3 = [-F[1], F[0]];
+  const lat = (P[0] - c.pos[0]) * R3[0] + (P[2] - c.pos[2]) * R3[1];
+  return [c.pos[0] + F[0] * 0.5 + R3[0] * lat, 0.1, c.pos[2] + F[1] * 0.5 + R3[1] * lat]; };
+// a point off the right edge of the frame beside P (reward / pointing hands enter and leave this way, arm along the bottom-right)
+const OUTR = (f, P) => { const c = camAt(f), fw = [c.look[0] - c.pos[0], c.look[2] - c.pos[2]], n = Math.hypot(fw[0], fw[1]), F = [fw[0] / n, fw[1] / n], R3 = [-F[1], F[0]];
+  return [P[0] + R3[0] * 0.75, P[1] - 0.12, P[2] + R3[1] * 0.75]; };
+const EAT = { turn: w.reward1 + 1, fade: w.reward2 + 9, final: w.reward3 + 2 };
+export const worldAt = (f) => {
+  const S = shotAt(f), W = {}, lead = leadAt(f), mouth = MOUTH();
+  const hand = (at, pose, extra = {}) => ({ at, pose, mode: 'reach', side: 0.3, ...extra });
+  const EMPTY = { palm: [0, -1, 0], fingers: [-0.85, -0.35, -0.4] };
+  const win = (a, b) => f >= a && f <= b;
+  switch (S.id) {
+    case 'hold': {   // gold POV: pinched treat at the nose
+      const t = KF(f, [[w.hold, [0.75, 0.3, 0.25]], [w.hold + 14, add(NOSE(), [0.06, -0.005, 0])], [w.move - 1, add(NOSE(), [0.07, -0.01, 0.01])]]);
+      W.treat = t; W.hand = { treat: t, side: 0.16 }; break;
+    }
+    case 'circle': W.paw = { pos: KF(f, [[w.move, add(lead, [0, 0.0, 0])], [w.when, lead]]), s: 0.8 }; if (f < w.move + 6) W.paw.pos = lead; break;
+    case 'turn': {
+      const t = KF(f, [[w.reward1 - 12, lead], [w.reward1 - 3, add(NOSE(), [0.08, -0.03, 0.0])], [w.reward1 + 1, add(NOSE(), [0.08, -0.03, 0.0])]]);
+      const up = R(f, w.reward1 + 2, w.reward1 + 16);
+      W.treat = t; W.paw = { pos: f >= EAT.turn ? lerp3(t, OUTR(f, t), up) : t, s: 0.8 };
+      if (f >= EAT.turn) W.treatHide = true;
+      break;
+    }
+    case 'fade': {
+      // the same circle with nothing in the cursor (the "empty hand"), then the other hand rewards from the right
+      const k = f < w.after + 22 ? lerp3(OUTR(f, lead), lead, R(f, w.after + 8, w.after + 22)) : f < w.reward2 - 4 ? lead : lerp3(lead, OUTR(f, lead), R(f, w.reward2 - 4, w.reward2 + 10));
+      if (f >= w.after + 8 && f <= w.reward2 + 12) W.paw = { pos: k, s: 0.8 };
+      const tt = KF(f, [[w.reward2 + 2, OUTR(w.reward2 + 2, mouth)], [w.reward2 + 13, mouth], [w.reward2 + 28, mouth], [w.reward2 + 38, OUTR(w.reward2 + 38, mouth)]]);
+      if (win(w.reward2 + 3, w.reward2 + 37)) { W.treat = tt; W.hand2 = { at: tt, pose: 'pinch', side: 0.3 }; }
+      if (f >= EAT.fade) W.treatHide = true;
+      break;
+    }
+    case 'cue': if (f >= w.twirl2 + 30) W.paw = { pos: lead, s: 0.8 }; break;
+    case 'mix': W.paw = { pos: lead, s: 0.8 }; break;
+    case 'mistake': W.paw = { pos: f < w.if + 14 ? lead : f < w.if + 70 ? clearHead(f, cursorCW) : clearHead(f, cursorLoop), s: 0.8 }; break;
+    case 'fix': {
+      const st = stateAt(f);
+      if (f <= w.use + 48) W.paw = { pos: lead, s: 0.8 };
+      const hp = KF(f, [[w.use + 44, OUTR(w.use + 44, lead)], [w.use + 58, add(lead, [0.03, -0.03, 0.0])]]);
+      if (f >= w.use + 45) W.hand = hand(hp, 'point', { palm: [0, -1, 0], fingers: [-0.85, -0.35, -0.4], side: 0.3 });
+      break;
+    }
+    case 'final': {
+      const t = KF(f, [[w.then2, add(MOUTH(), [0.3, 0.14, 0.05])], [w.reward3 + 2, add(NOSE(), [0.06, -0.02, 0])]]);
+      W.treat = t; W.hand = { treat: t, side: 0.22 };
+      if (f >= EAT.final) W.treatHide = true;
+      break;
+    }
+  }
+  return W;
+};
+// the (wrong) clockwise cursor while the puppy turns counter-clockwise: same circle the hand would draw for Twirl
+const cursorCW = (f) => { const a = w.if + 14, b = w.if + 70, p = sm(ramp(f, a, b)), th = TH0 - 2 * Math.PI * p, d = NOSE()[0] + 0.08; return [DOGPOS[0] + Math.sin(th) * d, NOSE()[1] - 0.01, DOGPOS[2] + Math.cos(th) * d]; };
+
+const cursorLoop = (f) => { const th = TH0 - 2 * Math.PI * ((f - w.if - 70) / 110), d = NOSE()[0] + 0.08; return [DOGPOS[0] + Math.sin(th) * d, NOSE()[1] - 0.01, DOGPOS[2] + Math.cos(th) * d]; };
+// ---------- the 2D trainer (hook + yes) ----------
+const talkAt = (f) => clamp((VENV[f] || 0) * 1.25);
+const trainerYes = (f) => {
+  const hi = idle(f, 3), clickOn = f >= w.click && f < w.click + 5;
+  return { kneel: 1, expr: f >= w.yes - 4 && f < w.yes + 16 ? 'yes' : f >= w.yes + 16 ? 'proud' : 'grin', talk: talkAt(f) * 0.6, blink: blinkAt(f, 3), look: -0.3, headTilt: hi.headTilt + 4,
+    near: { to: [318, 690 - 40 * sm(ramp(f, w.click - 10, w.click - 2))], hand: 'clicker', bend: -1 }, click: clickOn ? 1 : 0, far: f >= w.yes ? 'thumb' : 'present', lean: 6 };
+};
+const trainerHook = (f) => {
+  const hi = idle(f, 3);
+  return { hose: true, kneel: 1, expr: f > 30 ? 'grin' : 'smile', talk: talkAt(f) * 0.9, blink: blinkAt(f, 3), look: f > 40 ? -0.2 : 0.8, headTilt: hi.headTilt, near: { to: [270, 806], hand: 'fist', bend: -1 }, far: 'present' };
+};
+
+// ---------- cameras (dog-down-ii keys; only look-at targets and timing change) ----------
+const POV = (a, b) => [{ f: a, pos: [1.28, 0.88, 0.56], look: [0.2, 0.22, 0.0], fov: 42 }, { f: b, pos: [1.22, 0.82, 0.53], look: [0.22, 0.16, 0.0], fov: 42 }];
+// same direction and fov as dog-down-ii's floating 3/4 keys, pulled back along the view line so a full walking circle stays inside the frame
+const PB = (pos, look, k) => look.map((l, i) => l + (pos[i] - l) * k);
+const STAND = (a, b) => [{ f: a, pos: PB([1.32, 0.66, 0.66], [0.02, 0.26, 0.1], 1.7), look: [0.02, 0.26, 0.1], fov: 42 }, { f: b, pos: PB([1.26, 0.62, 0.63], [0.03, 0.23, 0.1], 1.7), look: [0.03, 0.23, 0.1], fov: 42 }];
+const CAMS = {
+  hook: [{ f: 0, pos: [0.18, 0.86, 2.4], look: [0.22, 0.56, -0.45], fov: 43 }, { f: w.grab - 1, pos: [0.2, 0.84, 2.25], look: [0.23, 0.56, -0.45], fov: 43 }],
+  setup: [{ f: w.grab, pos: [2.45, 0.92, 0.2], look: [1.85, 0.64, -0.75], fov: 40 }, { f: w.nonslip - 8, pos: [2.38, 0.9, 0.1], look: [1.85, 0.62, -0.75], fov: 40 },
+    { f: w.nonslip - 7, pos: [1.22, 0.52, 1.0], look: [0.04, 0.2, 0.0], fov: 38 }, { f: w.hold - 1, pos: [1.1, 0.47, 0.9], look: [0.04, 0.19, 0.0], fov: 38 }],
+  hold: POV(w.hold, w.move - 1),
+  circle: STAND(w.move, w.when - 1),
+  turn: STAND(w.when, w.after - 1),
+  fade: STAND(w.after, w.now - 1),
+  cue: STAND(w.now, w.then - 1),
+  mix: STAND(w.then, w.if - 1),
+  mistake: [{ f: w.if, pos: PB([0.84, 0.5, 1.3], [0.1, 0.3, 0.0], 1.2), look: [0.1, 0.3, 0.0], fov: 44 }, { f: w.use - 1, pos: PB([0.78, 0.6, 1.45], [0.1, 0.34, 0.0], 1.2), look: [0.1, 0.34, 0.0], fov: 44 }],
+  fix: STAND(w.use, w.say2 - 1),
+  yes: [{ f: w.say2, pos: [0.08, 0.82, 2.15], look: [0.12, 0.5, -0.3], fov: 42 }, { f: w.then2 - 1, pos: [0.12, 0.78, 1.95], look: [0.14, 0.52, -0.3], fov: 42 }],
+  final: [{ f: w.then2, pos: [1.34, 0.84, 0.72], look: [0.17, 0.2, 0.0], fov: 42 }, { f: TOTAL - 1, pos: [1.29, 0.81, 0.69], look: [0.18, 0.2, 0.0], fov: 42 }],
+};
+const HANDSHOTS = ['hold', 'fade', 'cue', 'fix', 'final'];
+export const camAt = (f) => {
+  const S = shotAt(f), c = camFromKeys(CAMS[S.id], f, {});
+  if (HANDSHOTS.includes(S.id)) { c.pos = add(c.pos, [0.006 * Math.sin(f * 0.11), 0.005 * Math.sin(f * 0.07 + 1), 0.006 * Math.sin(f * 0.09 + 2)]); c.roll = (c.roll || 0) + 1.2 * Math.sin(f * 0.05); }
+  c.shadowAt = [0.1, 0.2, 0];
+  return c;
+};
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+export const dofAt = (f) => {
+  const S = shotAt(f), C = camAt(f);
+  if (S.id === 'hook' || S.id === 'yes') return { focus: dist(C.pos, [0.3, 0.35, -0.15]), cinf: 6 };
+  if (S.id === 'setup') return { focus: dist(C.pos, C.look), cinf: 7 };
+  return { focus: dist(C.pos, [0.05, 0.2, 0.0]), cinf: 4 };
+};
+
+// ---------- 2D actors + effects ----------
+const roundAll = (o) => { const r = {}; for (const k in o) { const v = o[k]; r[k] = typeof v === 'number' ? q(v, 2) : Array.isArray(v) ? v.map((x) => (typeof x === 'number' ? Math.round(x) : x)) : v && typeof v === 'object' ? roundAll(v) : v; } return r; };
+export const actorsAt = (f, T) => {
+  CUR = camAt(f).pos; TCUR = TRN;
+  const S = shotAt(f), out = [];
+  const tr = (o) => { const tO = roundAll({ ...o, mirror: true }); out.push({ key: 'tr' + JSON.stringify(tO), draw: (p) => T.trainerDraw(p, tO), x: TRN[0], y: TRN[1], z: TRN[2], s: ST, flip: true, order: 1, ground: MAT, blobW: 0.8 }); };
+  if (S.id === 'yes') tr(trainerYes(f));
+  if (S.id === 'hook') tr(trainerHook(f));
+  return out;
+};
+const BUB = [0.0, 0.4, 0.0], BUB_YES = [-0.12, 0.78, -0.45];
+const FX = (key, draw, pos, s, extra = {}) => ({ key, draw, x: pos[0], y: pos[1], z: pos[2], s, blob: false, shadow: false, order: 6, ...extra });
+export const fxAt = (f, T) => {
+  CUR = camAt(f).pos;
+  const out = [], S = shotAt(f);
+  const pop = (a, b) => q(M.back(ramp(f, a, a + 9)) * (1 - sm(ramp(f, b - 6, b))), 2);
+  const badge = (fn, key, a, b, pos, s) => { if (f >= a && f < b) { const k = pop(a, b); if (k > 0.02) out.push(FX(key + k, (p) => fn(p, 1), pos, s * k, { roll: q(0.06 * Math.sin(f * 0.2), 2) })); } };
+  const hearts = (t0, at, n = 3, sc = 0.06) => { for (let i = 0; i < n; i++) { const a = t0 + i * 4, k = ramp(f, a, a + 24); if (k > 0 && k < 1) out.push(FX('ht', (p) => T.fxHeart2(p), [at[0] + (i - 1) * 0.07, at[1] + 0.06 + k * 0.18, at[2]], sc * M.back(ramp(f, a, a + 7)), { alpha: q(1 - k * k, 2) })); } };
+  const bubble = (key, text, sub, fill, a, b, pos, sc) => { if (f >= a && f < b) { const k = q(M.back(ramp(f, a, a + 7)) * (1 - sm(ramp(f, b - 5, b))), 2); if (k > 0.02) out.push(FX(key + k, (p) => T.fxBubble(p, text, sub, fill), [pos[0], pos[1] + 1.07 * sc * (1 - k), pos[2]], sc * k, { order: 8 })); } };
+  if (S.id === 'hook') hearts(w.twirl1 + 56, add(SHOOK(HEAD()), [0, -0.05, 0]), 3, 0.07);
+  if (S.id === 'setup') badge(T.fxCheck, 'ok', w.nonslip + 6, w.hold, [0.5, 0.1, 0.5], 0.11);
+  if (S.id === 'turn') { hearts(w.reward1 + 2, HEAD()); badge(T.fxCheck, 'ok', w.reward1 + 6, w.after - 4, [0.4, 0.5, 0.2], 0.14); }
+  if (S.id === 'fade') hearts(w.reward2 + 9, HEAD());
+  if (S.id === 'cue') bubble('bt', 'Twirl!', '', '#ffffff', w.twirl2 - 2, w.twirl2 + 44, BUB, 0.36);
+  if (S.id === 'mix') { bubble('bt2', 'Twirl!', '', '#ffffff', w.then, w.spin3 - 8, BUB, 0.36); bubble('bs', 'Spin!', '', '#ffffff', w.spin3 - 4, w.if - 4, BUB, 0.36); }
+  if (S.id === 'mistake') badge(T.fxCross, 'no', w.wrong - 3, w.use - 14, [0.0, 0.6, 0.0], 0.2);
+  if (S.id === 'fix') { hearts(w.use + 58, HEAD()); badge(T.fxCheck, 'ok', w.hand2 - 2, w.say2 - 4, [0.4, 0.5, 0.2], 0.14); }
+  if (S.id === 'yes') bubble('by', 'Yes!', '', '#fbf0b4', w.yes - 3, w.click - 4, BUB_YES, 0.5);
+  if (S.id === 'yes' && f >= w.click) { const k = q(ramp(f, w.click, w.click + 16), 2); out.push(FX('ck' + k, (p) => T.fxClick(p, k), [TRN[0] + 0.02, 0.62, TRN[2] + 0.12], 0.26)); }
+  if (S.id === 'final') {
+    hearts(w.reward3 + 3, HEAD(), 4, 0.06);
+    if (f >= w.reward3) for (let i = 0; i < 3; i++) { const t = q(ramp(f, w.reward3 + i * 3, TOTAL - 1), 2); out.push(FX('cf' + i + t, (p) => T.fxConfetti(p, t, i + 1), add(NOSE(), [0.05, 0.1, -0.2 + i * 0.2]), 0.4, { order: 7 })); }
+  }
+  return out;
+};
+const SHOOK = (P) => [P[0], P[1], P[2] + HOOKP[2]];

@@ -1,0 +1,216 @@
+{
+ "duration": 41.241375,
+ "frames30": 1237,
+ "source": "silence-align (cost 0.60)",
+ "segments": [
+  [
+   0.0,
+   1.892146
+  ],
+  [
+   2.738667,
+   4.566312
+  ],
+  [
+   5.366542,
+   6.008229
+  ],
+  [
+   6.436021,
+   9.212979
+  ],
+  [
+   10.012229,
+   10.782312
+  ],
+  [
+   11.581792,
+   13.317792
+  ],
+  [
+   13.731438,
+   15.057292
+  ],
+  [
+   15.87175,
+   16.2695
+  ],
+  [
+   16.675062,
+   17.253667
+  ],
+  [
+   18.064729,
+   18.854375
+  ],
+  [
+   19.252125,
+   20.284854
+  ],
+  [
+   21.106208,
+   23.007583
+  ],
+  [
+   23.897396,
+   24.926292
+  ],
+  [
+   25.328958,
+   26.076771
+  ],
+  [
+   26.933146,
+   28.174437
+  ],
+  [
+   28.614229,
+   30.047958
+  ],
+  [
+   30.858542,
+   31.429354
+  ],
+  [
+   31.813688,
+   32.874458
+  ],
+  [
+   33.678417,
+   34.605229
+  ],
+  [
+   35.44725,
+   37.346958
+  ],
+  [
+   38.201604,
+   38.747437
+  ],
+  [
+   39.149021,
+   39.572271
+  ],
+  [
+   39.999562,
+   40.51825
+  ]
+ ],
+ "phrases": [
+  {
+   "text": "Let's teach your dog a rock-solid down!",
+   "s": 0.0,
+   "e": 1.892
+  },
+  {
+   "text": "Grab some treats and a non-slip floor.",
+   "s": 2.739,
+   "e": 4.566
+  },
+  {
+   "text": "Lure first:",
+   "s": 5.367,
+   "e": 6.008
+  },
+  {
+   "text": "hold a treat at the nose and slowly lower it straight to the floor.",
+   "s": 6.436,
+   "e": 9.213
+  },
+  {
+   "text": "Now fade the lure.",
+   "s": 10.012,
+   "e": 10.782
+  },
+  {
+   "text": "Make the same movement with an empty hand,",
+   "s": 11.582,
+   "e": 13.318
+  },
+  {
+   "text": "and reward from your other hand.",
+   "s": 13.731,
+   "e": 15.057
+  },
+  {
+   "text": "Next,",
+   "s": 15.872,
+   "e": 16.27
+  },
+  {
+   "text": "add the cue.",
+   "s": 16.675,
+   "e": 17.254
+  },
+  {
+   "text": "Say \"down\" once,",
+   "s": 18.065,
+   "e": 18.854
+  },
+  {
+   "text": "then give the hand signal.",
+   "s": 19.252,
+   "e": 20.285
+  },
+  {
+   "text": "Reward the moment the elbows touch the floor.",
+   "s": 21.106,
+   "e": 23.008
+  },
+  {
+   "text": "Practice from a stand,",
+   "s": 23.897,
+   "e": 24.926
+  },
+  {
+   "text": "not just a sit.",
+   "s": 25.329,
+   "e": 26.077
+  },
+  {
+   "text": "If your dog pops back up,",
+   "s": 26.933,
+   "e": 28.174
+  },
+  {
+   "text": "you treated too late or too high.",
+   "s": 28.614,
+   "e": 30.048
+  },
+  {
+   "text": "Treat sooner,",
+   "s": 30.859,
+   "e": 31.429
+  },
+  {
+   "text": "and closer to the floor.",
+   "s": 31.814,
+   "e": 32.874
+  },
+  {
+   "text": "Never push them down.",
+   "s": 33.678,
+   "e": 34.605
+  },
+  {
+   "text": "Deliver treats while your dog stays down.",
+   "s": 35.447,
+   "e": 37.347
+  },
+  {
+   "text": "Say yes,",
+   "s": 38.202,
+   "e": 38.747
+  },
+  {
+   "text": "or click,",
+   "s": 39.149,
+   "e": 39.572
+  },
+  {
+   "text": "then reward!",
+   "s": 40.0,
+   "e": 40.518
+  }
+ ]
+}

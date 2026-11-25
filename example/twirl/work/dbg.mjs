@@ -1,0 +1,11 @@
+import { chromium } from 'playwright'; import http from 'http'; import fs from 'fs'; import path from 'path';
+const root = path.resolve('web');
+const srv = http.createServer((q, s) => { const p = path.join(root, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p)) { s.writeHead(404); return s.end(); } s.writeHead(200, { 'Content-Type': p.endsWith('.js') ? 'text/javascript' : 'text/html' }); fs.createReadStream(p).pipe(s); }).listen(0);
+await new Promise(r => srv.on('listening', r));
+const b = await chromium.launch({ args: ['--use-angle=d3d11','--enable-gpu','--ignore-gpu-blocklist'] });
+const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
+await pg.goto(`http://localhost:${srv.address().port}/index.html`);
+await pg.waitForFunction(() => window.ready || window.err, null, { timeout: 180000 });
+const frames = process.argv.slice(2).map(Number);
+console.log(JSON.stringify(await pg.evaluate((fr) => { const d = window.__d; return { out: fr.map(f => { const c = d.camAt(f), P = d.leadBase(f), L = d.leadAt(f), h = d.headAt(f); const sp = d.toScr(c, P), sl = d.toScr(c, L), sh = d.toScr(c, h); return { f, base: [sp.x|0, sp.y|0], lead: [sl.x|0, sl.y|0], head: [sh.x|0, sh.y|0], r: d.SCR.headR*sh.fl/sh.z|0, need: d.needPx(f, d.leadBase)|0 }; }) }; }, frames)));
+await b.close(); srv.close();

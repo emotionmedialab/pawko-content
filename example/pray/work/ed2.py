@@ -1,0 +1,6 @@
+p='web/story.js'; s=open(p).read()
+s=s.replace("ly = 0.2, lx = 0.22, k = 1.12","ly = 0.14, lx = 0.27, k = 1.12")
+s=s.replace("const LOW = [0.36, MAT + 0.05, 0.04], LOW2 = [0.35, MAT + 0.03, 0.04];","const LOW = [0.4, MAT + 0.04, 0.16], LOW2 = [0.38, MAT + 0.03, 0.16];")
+s=s.replace("add(tc, [0.02, -0.07, 0.17])","add(tc, [0.1, -0.07, 0.2])")
+s=s.replace("pos: [0.07, 0.5, 2.0], look: [0.07, 0.34, 0.0], fov: 55 }, { f: w.a - 1, pos: [0.07, 0.54, 2.05], look: [0.07, 0.36, 0.0]","pos: [0.07, 0.5, 1.6], look: [0.07, 0.2, 0.0], fov: 55 }, { f: w.a - 1, pos: [0.07, 0.54, 1.65], look: [0.07, 0.22, 0.0]")
+open(p,'w').write(s)

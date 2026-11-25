@@ -1,0 +1,57 @@
+  // v4 camera rule (Nel): static or gently drifting sideways by default, new angles for variety; push-ins only on emphasis beats (h2 hook close-up, g3 drool, a2 act fast, c1 CTA)
+  const drift = (a, b, A, dx) => glide(a, b, A, { pos: [A.pos[0] + dx, A.pos[1], A.pos[2]], look: [A.look[0] + dx, A.look[1], A.look[2]], fov: A.fov });
+  const SHOTS = [
+    // hook: hot sunny walk, a cut about every 1.1 s
+    { id: 'h1-wide-walk', a: 0, b: 35, k: 'street', cam: track(ox, [0.25, 0.95, 4.7], [0.25, 0.6, 0], 40) },
+    { id: 'h2-puppy-low-pant', a: 36, b: 66, k: 'street', cam: push(track(dxAt, [1.5, 0.5, 1.9], [0.05, 0.3, DZ], 40), 36, 66, 0.12) },
+    { id: 'h3-low-sun-hero', a: 67, b: 100, k: 'street', cam: track(ox, [0.9, 0.32, 2.5], [0.1, 1.05, -1.0], 52) },
+    { id: 'h4-owner-glance', a: 101, b: 131, k: 'street', cam: track(ox, [1.7, 1.05, 3.1], [0.35, 0.72, 0.15], 40) },
+    { id: 's1-front-wide-save', a: 132, b: 162, k: 'street', cam: track(ox, [3.6, 0.9, 3.4], [0.35, 0.68, 0.1], 42) },
+    { id: 's2-puppy-side-close', a: 163, b: 203, k: 'street', cam: track(dxAt, [0.45, 0.5, 2.3], [0.15, 0.32, DZ], 38) },
+    { id: 's3-high-wide', a: 204, b: 266, k: 'street', cam: track(ox, [1.4, 3.0, 3.6], [0.4, 0.2, 0], 44) },
+    // not an extreme day: normal walk, hot afternoon
+    { id: 'e1-sun-park', a: 267, b: 300, k: 'street', cam: track(ox, [0.6, 0.75, 3.6], [0.6, 1.6, -6], 50) },
+    { id: 'e2-side-medium', a: 301, b: 333, k: 'street', cam: track(ox, [0.3, 0.9, 4.1], [0.3, 0.55, 0], 40) },
+    { id: 'e3-front-low-normal', a: 334, b: 369, k: 'street', cam: track(dxAt, [2.2, 0.5, 2.5], [-0.25, 0.32, 0.1], 44) },
+    { id: 'e4-low-paws-heat', a: 370, b: 404, k: 'street', cam: track(dxAt, [1.3, 0.26, 1.9], [-0.1, 0.25, 0.25], 44) },
+    { id: 'e5-wide-shimmer', a: 405, b: 436, k: 'street', cam: track(ox, [0.25, 0.95, 4.7], [0.25, 0.6, 0], 40) },
+    // warning signs
+    { id: 'g1-owner-looks-down', a: 437, b: 466, k: 'street', cam: track(ox, [1.4, 1.35, 2.3], [0.25, 1.05, 0.05], 38) },
+    { id: 'g2-panting-close', a: 467, b: 483, k: 'street', cam: track(dxAt, [1.1, 0.5, 1.6], [0.2, 0.36, DZ], 36) },
+    { id: 'g3-drool-face', a: 484, b: 503, k: 'street', cam: faceCam(-0.7, 0.95, 0.8, 0.02, 34, 484, 503, -0.11) },
+    { id: 'g4-collapse-low', a: 504, b: 532, k: 'street', cam: drift(504, 532, C([DX + 0.2, 0.45, 2.3], [DX + 0.05, 0.22, DZ], 42), 0.06) },
+    { id: 'g5-refuse-leash', a: 533, b: 571, k: 'street', cam: drift(533, 571, C([DX + 0.3, 1.0, 4.1], [DX + 0.2, 0.45, 0.1], 40), 0.08) },
+    { id: 'g6-chin-down', a: 572, b: 594, k: 'street', cam: drift(572, 594, C([DX + 0.45, 0.55, 2.25], [DX + 0.15, 0.22, DZ], 40), -0.05) },
+    // act fast, 1 STOP, the walk is over
+    { id: 'a1-owner-turns', a: 595, b: 619, k: 'street', cam: drift(595, 619, C([OX + 1.2, 1.25, 3.3], [OX - 0.25, 0.42, 0.1], 40), 0.06) },
+    { id: 'a2-puppy-down-pushin', a: 620, b: 642, k: 'street', cam: glide(620, 642, C([DX + 1.0, 0.34, 1.75], [DX + 0.12, 0.22, DZ], 40), C([DX + 0.78, 0.32, 1.4], [DX + 0.12, 0.22, DZ], 40)) },
+    { id: 'a3-owner-reacts', a: 643, b: 666, k: 'street', cam: drift(643, 666, C([OX - 1.75, 1.25, 1.95], [OX, 1.25, OZ], 38), 0.06) },
+    { id: 'p1-stop-front', a: 667, b: 717, k: 'street', cam: drift(667, 717, C([OX + 0.2, 1.1, 4.5], [OX - 0.15, 1.1, 0.1], 42), -0.08) },
+    { id: 'p2-kneel-pet', a: 718, b: 774, k: 'street', cam: drift(718, 774, C([DX + 1.6, 0.7, 3.6], [DX + 0.05, 0.33, 0.2], 40), -0.08) },
+    // 2 SHADE: get up, walk on into the shade tree's cool shadow, sit down there
+    { id: 'd1-wide-shade-tree', a: 775, b: 806, k: 'street', cam: drift(775, 806, C([1.9, 1.5, 6.6], [1.9, 1.05, -0.4], 46), 0.08) },
+    { id: 'd2-walk-to-shade', a: 807, b: 859, k: 'street', cam: (f) => { const x = lerp(DX, sx, ramp(f, 805, 902)); return { pos: [x + 0.15, 1.0, 5.0], look: [x + 0.15, 0.85, 0], fov: 40 }; } },
+    { id: 'd3-front-low-into-shade', a: 860, b: 900, k: 'street', cam: drift(860, 900, C([sx + 1.6, 0.85, 3.8], [sx - 0.3, 0.5, -0.1], 44), -0.08) },
+    { id: 'd4-lies-in-shade', a: 901, b: 948, k: 'street', cam: drift(901, 948, C([sx + 0.75, 1.1, 4.4], [sx - 0.15, 0.45, sz], 44), -0.06) },
+    // 3 WATER: bucket, pour over the whole body, no ice / no wet towels, they trap the heat
+    { id: 'r1-bucket-insert', a: 949, b: 982, k: 'street', cam: drift(949, 982, C([BUCKET0[0] + 0.8, 0.55, BUCKET0[2] + 0.55], [BUCKET0[0], 0.28, BUCKET0[2]], 40), 0.05) },
+    { id: 'r2-pour-wide', a: 983, b: 1053, k: 'street', cam: drift(983, 1053, C([sx + 0.75, 1.1, 4.4], [sx - 0.15, 0.45, sz], 44), -0.1) },
+    { id: 'r3-pour-body-close', a: 1054, b: 1097, k: 'street', cam: drift(1054, 1097, C([sx + 1.8, 0.7, 3.6], [sx - 0.2, 0.5, sz], 42), -0.08) },
+    { id: 'r4-not-just-paws', a: 1098, b: 1143, k: 'street', cam: drift(1098, 1143, C([sx + 0.6, 0.45, 1.3], [sx + 0.1, 0.3, sz], 42), -0.05) },
+    { id: 'r5-no-ice-towels', a: 1144, b: 1229, k: 'street', cam: drift(1144, 1229, C([sx + 0.3, 1.05, 4.8], [sx - 0.1, 0.55, sz], 44), -0.1) },
+    { id: 'r6a-trap-heat-face', a: 1230, b: 1257, k: 'street', cam: faceCam(0.25, 1.15, 1.15, 0.08, 36, 1230, 1257, -0.1) },
+    { id: 'r6b-heat-low-side', a: 1258, b: 1285, k: 'street', cam: drift(1258, 1285, C([sx - 0.85, 0.45, sz + 1.35], [sx + 0.15, 0.33, sz + 0.15], 40), 0.05) },
+    // 4 AIR: living room, fan on the puppy
+    { id: 'i1-fan-wide', a: 1286, b: 1339, k: 'room', cam: drift(1286, 1339, C([0.55, 1.0, 2.9], [-0.3, 0.3, 0.0], 44), -0.1) },
+    { id: 'i2-fan-close', a: 1340, b: 1366, k: 'room', cam: drift(1340, 1366, C([-0.22, 0.95, 0.7], [FAN.pos[0], 0.9, FAN.pos[1]], 40), 0.04) },
+    { id: 'i3-puppy-in-air', a: 1367, b: 1415, k: 'room', cam: faceCam(1.3, 1.45, 1.45, 0.05, 38, 1367, 1415, -0.06) },
+    // 5 VET: owner phones the vet, still beside the puppy in the fan
+    { id: 'v1-owner-phone', a: 1416, b: 1445, k: 'room', cam: drift(1416, 1445, C([1.4, 1.45, 2.4], [0.8, 1.42, -0.5], 38), -0.05) },
+    { id: 'v2-phone-and-puppy', a: 1446, b: 1479, k: 'room', cam: drift(1446, 1479, C([0.85, 1.3, 3.7], [0.25, 0.92, -0.3], 42), -0.06) },
+    { id: 'v3-keep-cooling', a: 1480, b: 1507, k: 'room', cam: drift(1480, 1507, C([0.55, 1.0, 2.9], [-0.3, 0.3, 0.0], 44), 0.08) },
+    { id: 'v4-wide-go', a: 1508, b: 1544, k: 'room', cam: drift(1508, 1544, C([0.0, 1.2, 4.6], [0.3, 0.45, -0.2], 42), 0.08) },
+    { id: 'v5-puppy-seems-fine', a: 1545, b: 1560, k: 'room', cam: faceCam(1.5, 1.2, 1.2, 0.05, 38, 1545, 1560, -0.08) },
+    { id: 'v6-puppy-wag-low', a: 1561, b: 1576, k: 'room', cam: drift(1561, 1576, C([-0.72, 0.5, 1.4], [0.0, 0.3, 0.35], 40), 0.04) },
+    // CTA: owner kneels and pets the recovered puppy
+    { id: 'c1-kneel-pet-cta', a: 1577, b: 1686, k: 'room', cam: glide(1577, 1686, C([0.3, 0.95, 4.45], [0.05, 0.56, 0.25], 40), C([-0.05, 0.9, 4.05], [0.05, 0.56, 0.25], 40)) },
+  ];

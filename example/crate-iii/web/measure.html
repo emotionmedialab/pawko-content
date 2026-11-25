@@ -1,0 +1,15 @@
+<!doctype html><html><body><canvas id="c" width="200" height="200"></canvas>
+<script type="module">
+import * as THREE from './lib/three.module.js';
+import { GLTFLoader } from './lib/jsm/GLTFLoader.js';
+import { makeDog } from './dogrig.js';
+const g = await new GLTFLoader().loadAsync('models/dog-puppy.glb');
+const dog = makeDog(g, { scale: 1.6 });
+dog.root.rotation.set(0, Math.PI/2, 0); dog.root.updateMatrixWorld(true);
+for (const [n, w] of [['down',{down:1}],['sit',{sit:1}],['hip',{hip:1}],['flop',{flop:1}],['stand',{stand:1}]]) {
+  dog.pose({ w, look: new THREE.Vector3(3,0.3,0), neck: 1 }); dog.root.updateMatrixWorld(true);
+  const box = new THREE.Box3(); dog.root.traverse(o => { if (o.isSkinnedMesh) { o.skeleton.update(); o.computeBoundingBox(); const b = o.boundingBox.clone().applyMatrix4(o.matrixWorld); box.union(b); } });
+  console.log(n, 'box', box.min.toArray().map(v=>v.toFixed(2)).join(','), box.max.toArray().map(v=>v.toFixed(2)).join(','), 'nose', dog.noseWorld().toArray().map(v=>v.toFixed(2)).join(','), 'head', dog.headWorld().toArray().map(v=>v.toFixed(2)).join(','));
+}
+window.done = 1;
+</script></body></html>
