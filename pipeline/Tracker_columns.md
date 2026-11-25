@@ -1,27 +1,19 @@
 # Tracker columns (Google Sheet)
 
-One row per video. **Nel creates the sheet**; Claude never edits Google Sheets. The builder fills it in.
-Claim a row before building so two people never build the same video.
+Sheet: https://docs.google.com/spreadsheets/d/1pcZ72SNah2HaWLfxI7IOGTmOh5HQptoWVWR0ZqEzkCE (tab "Tracker").
+One row per video. The builder fills it in; Claude never edits it. **Fill Builder before starting** so two people never build the same video.
 
-| Column | Example / notes |
+| Column | Notes |
 |---|---|
-| Claimed by / date | `Nel 2026-11-25`: fill it BEFORE starting |
-| Builder | David / Nel / James |
-| Status | Claimed · Script · Voice · Shot list · Build · QA · Final · Delivered |
-| Current version | `Heatstroke.mp4` / `Heatstroke_v2.mp4` |
-| Change request | what needs changing (edit flow) |
-| Change status | Open · In progress · Done |
-| Lane | cartoon / realistic |
-| Topic | Heatstroke |
-| Hook line | line 1, word for word |
-| Format | e.g. 5 numbered steps |
-| Source URL | original IG reel |
-| Drive link | the video's Drive folder |
-| Credits spent | Higgsfield credits for this video (shared balance; cap ≈ 240 per realistic video) |
-| Date posted | whoever posts |
-| Reel URL | our IG reel |
-| Views | from Instagram insights |
-| PAW comments | |
-| Emails | from the PAW DM flow |
-| Waitlist signups | |
-| Installs / trials | after launch only |
+| Topic | e.g. Heatstroke |
+| Lane | cartoon / realistic (dropdown) |
+| Builder | name + date claimed, e.g. `Nel 11-25` |
+| Status | Claimed · Building · Final · Delivered · Editing (dropdown) |
+| Change request | what to edit; blank = nothing. Clear it when the edit is delivered. |
+| Drive link | the video's Drive folder (versions live there) |
+| Credits | Higgsfield credits for this video (shared balance; cap ≈ 240 per realistic video) |
+| Reel URL | the posted reel |
+| Views | from Instagram |
+| PAW comments | from Instagram |
+
+**Add later:** Emails and Waitlist signups once the PAW DM flow is live; Installs / trials after launch.

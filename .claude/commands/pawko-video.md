@@ -12,7 +12,7 @@ The procedure, credit cap, failure rules and edit flow live in `pipeline/README.
 Ask, and wait for the answers:
 1. **Who is building?** (David, Nel or James.) They approve every stop below.
 2. **Which lane?** cartoon or realistic (suggest one from the source reel if obvious).
-3. **Is the row claimed in the tracker** ("Claimed by / date")? If someone else claimed it, stop.
+3. **Is the row claimed in the tracker** ("Builder" column)? If someone else claimed it, stop.
 
 Read `PLAYBOOK-DOG-APP.md` (cartoon) or `pipeline/realistic/PROMPT-STYLE.md` (realistic).
 Video folder: cartoon `example/<slug>/`, realistic `pipeline/realistic/<slug>/`.
@@ -33,14 +33,14 @@ Copy `pipeline/Brief_template.md` into the video folder as `brief.md`; update it
 7. **QA** — mandatory: every 3rd frame at full size with `pipeline/QA_checklist.md`; up to 3 fix rounds; log `work/defects_v<N>.md`. **STOP: builder reviews the flagged frames** and decides fix or keep.
 8. **Final** — **STOP: builder locks it.** Name `<Topic>.mp4`. Cartoon: copy the editing pack (`voice.mp3`/`voice.wav`, `music.wav`, `sfx.wav`) next to it.
 9. **Deliver** — fill `pipeline/Delivery_template.md` as `delivery.md`. The builder uploads to Drive and **confirms the files are there**.
-10. **Log** — remind the builder to fill the tracker row (status, Drive link, current version, **credits spent**). Done at "delivered to Drive".
+10. **Log** — remind the builder to fill the tracker row (status, Drive link, **credits**). Done at "delivered to Drive".
 
 ## `edit <topic>`
 
 1. Find the video folder and its `brief.md`; confirm the **Change request** from the tracker with the builder.
 2. Cartoon: edit the project and re-render **only the affected shots**, then `finish.sh`. Realistic: fix in post (trim, cut, captions, audio), or a new take within the cap (**STOP: builder approves the spend**).
 3. QA the changed part with `pipeline/QA_checklist.md`. **STOP: builder reviews.**
-4. Save as the next version (`_v2`, `_v3` …). **STOP: builder locks it.** Redeliver as in step 9 and remind them to update **Current version** and **Change status**.
+4. Save as the next version (`_v2`, `_v3` …). **STOP: builder locks it.** Redeliver as in step 9 and remind them to set Status = Delivered and clear **Change request**.
 
 ## Never
 

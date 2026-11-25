@@ -8,7 +8,7 @@
 - **Credits spent:** <n> cr · **shared balance after:** <n> cr (below 500 → tell David)
 - **Drive folder:** PawkoMarketing / `<Channel> <NN> – <Topic>` (e.g. `Cartoon 02 – Heatstroke`)
 - [ ] **Verified in Drive:** opened the folder; the video and the editing pack are there, sizes match, it plays (an upload failed silently on 2026-11-20)
-- [ ] Tracker row updated (status = Delivered, Drive link, current version, credits)
+- [ ] Tracker row updated (status = Delivered, Drive link, credits)
 
 ## Note for the group (optional, the builder sends it)
 
