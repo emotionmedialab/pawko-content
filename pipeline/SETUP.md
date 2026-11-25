@@ -6,7 +6,7 @@ Sources: `README.md` ("0. Install the tools"), `PLAYBOOK-DOG-APP.md` (section 1,
 ## 1. Get the kit and the media
 
 ```bash
-git clone <PRIVATE_REPO_URL> cartoon-short-kit
+git clone https://github.com/emotionmedialab/pawko-content.git cartoon-short-kit
 cd cartoon-short-kit && git checkout pawko
 ```
 - Git holds the code and docs only. **Big media comes from the Drive folder:** reference reels, voices/music/SFX (`*.mp3`, `*.wav`), finals (`*.mp4`), the realistic character images.
