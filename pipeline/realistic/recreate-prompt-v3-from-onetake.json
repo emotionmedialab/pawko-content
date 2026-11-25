@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "purpose": "Recreate the approved one-take (FINAL/Dog-Jumps-CTA-final.mp4) beat-for-beat — same staging, timing, gestures and dog path — but filmed in James's handheld UGC phone style",
+    "video_reference_note": "The reference video shows the exact performance, blocking and timing to follow. Copy its action, positions and timing closely. Do NOT copy its camera behaviour or color: the camera must be handheld per global_style.",
+    "model": "seedance_2_5, mode omni_reference, 720p, 9:16, 17 s",
+    "references": {
+      "video_reference": "df02b48a-5bee-4f85-858d-9fff3de74c69 (the approved one-take)",
+      "man_front": "4f5a2760-eb90-428c-89a6-b52d22dce986",
+      "man_back": "f3f076ac-4541-42cc-9cac-661dd67dec32",
+      "man_closeup": "d8802aa2-ca83-4772-897c-fd2f8eaf7af9",
+      "dog": "105bab16-3063-4eb5-bad6-a1452f6978fc",
+      "hallway": "8e93a421-1afd-4b43-91ca-09731eae6087",
+      "audio": "b684d942-bf68-4cf8-a8f9-72c569794e59 (updated-paced.mp3, Brian, 16.9 s)"
+    }
+  },
+
+  "global_style": "Vertical 9:16 UGC phone video, 24fps, shot on an iPhone held vertical by hand by a second person filming in a home entryway. Authentic phone-camera look, NOT cinematic, NOT a commercial, NOT film. Handheld the whole way, the camera operator shifting their weight, taking small half-steps, and reframing slightly to keep the man and dog centered as the action moves, the way someone filming a friend would. Flat ungraded phone color, natural white balance, slightly dull everyday indoor tones. Deep focus, everything sharp from the foreground floor to the back hallway wall, no background blur, no bokeh, no shallow depth of field. Slight phone sensor noise in the shadows, mild compression softness, no film grain, no halation, no anamorphic flare, no lens breathing.",
+
+  "format": {"aspect_ratio": "9:16", "fps": 24, "duration_seconds": 17, "takes": "one continuous take, no cuts, no zoom"},
+
+  "camera": {
+    "operator": "a friend standing in the hallway about 2 m from where the man stops, phone held vertical at chest height",
+    "behaviour": "always slightly alive: micro-shake, breathing, weight shifts, small half-steps and quick small reframes to keep the man and dog centered; never locked off, never gimbal-smooth, never a tripod",
+    "lens": "phone main camera ~24mm equivalent, deep focus",
+    "per_beat": [
+      {"time": "0.0-1.3s", "move": "handheld drift while the man walks toward the camera; operator re-centers him as he gets closer"},
+      {"time": "1.0-1.8s", "move": "quick small reframe down and right as the dog bursts in from the bottom-right corner and jumps up"},
+      {"time": "2.8-3.8s", "move": "operator takes a small half-step to the left following his turn, keeping man and dog centered"},
+      {"time": "3.8-7.0s", "move": "mostly steady but alive: breathing, micro-shake, a slight re-center"},
+      {"time": "7.0-7.6s", "move": "slight tilt down following the dog as it drops to the floor"},
+      {"time": "8.3-9.8s", "move": "operator dips down a little and takes a half-step in as he turns around and crouches"},
+      {"time": "9.8-13.1s", "move": "settled medium shot with small natural sway"},
+      {"time": "13.5-17.0s", "move": "operator drifts slightly closer, as if leaning in for the call to action"}
+    ]
+  },
+
+  "lighting": "ordinary daytime indoor light: daylight from the window at the far end of the hallway, the dome ceiling lights on, a soft patch of daylight on the floor at lower-left; not too bright, slightly dull and flat, natural white balance, no golden-hour glow, no studio light",
+
+  "set": {
+    "location": "the plain home hallway in the hallway reference image",
+    "details": "light grey walls, several white panel doors with silver lever handles on both sides, white baseboards, oak plank floor, long beige textured runner rug down the middle, round dome ceiling lights, a window at the far end",
+    "props": "none"
+  },
+
+  "characters": {
+    "man": {
+      "identity": "EXACTLY the man in the man reference images: bald on top with short white hair at the sides, short trimmed full white beard, ruddy weathered skin, about 67",
+      "wardrobe": "tan canvas work shirt with sleeves rolled to the forearm, brown leather suspenders crossing in an X on his back, dark-wash jeans, brown leather work boots",
+      "demeanor": "calm, friendly, matter-of-fact; smiles easily; never reacts to the jumping"
+    },
+    "dog": {
+      "identity": "EXACTLY the golden retriever in the dog reference image",
+      "position_rule": "in the foreground between camera and man with its back to the camera for most of the clip"
+    }
+  },
+
+  "timeline": [
+    {"time": "0.0-1.0s", "man": "walks toward the camera down the middle of the runner from mid-hallway, arms loose, relaxed half-smile, looking at the camera; full body in frame", "dog": "not visible", "audio": "silence, footsteps"},
+    {"time": "1.0-1.5s", "man": "slows and stops about 1.5 m from the camera, feet apart", "dog": "bursts in from behind the camera at the bottom-right corner and runs to him", "audio": "dog nails on the floor"},
+    {"time": "1.5-2.8s", "man": "arms slightly out to his sides with open palms, not touching the dog, looking into the camera and talking", "dog": "up on its hind legs, both front paws on his stomach, back to the camera, tail wagging", "audio": "\"Dog jumps on you,\""},
+    {"time": "2.8-3.8s", "man": "on \"turn your back\" he folds his arms across his chest and rotates to his left (toward camera-right) through profile until his back faces the camera", "dog": "stays up, paws sliding to his back", "audio": "\"turn your back.\""},
+    {"time": "3.8-7.0s", "man": "back to camera, suspenders' X visible, arms folded, head turned slightly to his right as he speaks over his shoulder, otherwise completely still", "dog": "standing tall on hind legs with front paws on his back, pawing", "audio": "\"No eye contact. No hands.\" (4.2-6.6s)"},
+    {"time": "7.0-7.6s", "man": "still back turned, arms folded, does nothing", "dog": "gives up ON ITS OWN: drops off his back to the floor, all four paws down", "audio": "silence"},
+    {"time": "7.6-8.3s", "man": "still back turned, arms folded", "dog": "sits behind him on the runner looking up at his back", "audio": "silence"},
+    {"time": "8.3-9.8s", "man": "glances back over his shoulder, unfolds his arms, turns around toward the camera, bends forward reaching both hands toward the dog and crouches down on one knee", "dog": "sitting, looking up", "audio": "\"All four paws on the floor...\""},
+    {"time": "9.8-11.6s", "man": "crouched, both hands warmly rubbing the dog's chest and neck, smiling at the dog then at the camera", "dog": "sitting in the lower foreground, back to camera, leaning into him, tail wagging", "audio": "\"now he gets the love.\""},
+    {"time": "11.9-13.1s", "man": "looks straight into the camera with a warm, knowing half-smile", "dog": "sitting calmly", "audio": "\"Does yours jump?\""},
+    {"time": "13.1-13.5s", "man": "brief beat, smiling at the camera", "dog": "calm", "audio": "silence"},
+    {"time": "13.5-16.3s", "man": "still crouched with one hand on the dog, quickly and casually says the call to action with a small nod, lifting his free hand to point toward the camera / bottom of the screen on \"Comment PAW\", then lowering it back to the dog", "dog": "calm, sitting", "audio": "\"Comment PAW and I'll send you my complete free guide.\""},
+    {"time": "16.3-17.0s", "man": "stops talking, holds a warm closed-mouth smile at the camera, hands on the dog", "dog": "calm", "audio": "silence"}
+  ],
+
+  "audio_rules": "natural lip sync to the audio reference; he says each line exactly once and never repeats any words; quiet room tone, footsteps, dog nails on the floor, soft panting; no music",
+
+  "realism_rules": "realistic human and dog anatomy and physics, correct real-world scale against the doors, five fingers per hand, hands never merge into fur or clothing, the man's face and outfit identical throughout",
+
+  "negative": "tripod, locked-off camera, gimbal glide, dolly, crane, zoom, cuts, cinematic grading, golden-hour glow, warm film look, shallow depth of field, bokeh, film grain, halation, anamorphic flare, lens breathing, man guiding the dog down, repeated lines, extra limbs, extra fingers, morphing face, changing clothes, on-screen text, subtitles, logo, watermark, music"
+}

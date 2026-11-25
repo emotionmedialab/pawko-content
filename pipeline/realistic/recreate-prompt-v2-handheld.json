@@ -1,0 +1,49 @@
+{
+  "global_style": "Vertical 9:16 UGC phone video, 24fps, shot on an iPhone held vertical by hand by a second person filming in a home entryway. Authentic phone-camera look, NOT cinematic, NOT a commercial, NOT film. Handheld the whole way, the camera operator shifting their weight, taking small half-steps, and reframing slightly to keep the man and dog centered as the action moves, the way someone filming a friend would. Flat ungraded phone color, natural white balance, slightly dull everyday indoor tones. Deep focus, everything sharp from the foreground floor to the back hallway wall, no background blur, no bokeh, no shallow depth of field. Slight phone sensor noise in the shadows, mild compression softness, no film grain, no halation, no anamorphic flare, no lens breathing.",
+
+  "format": {"aspect_ratio": "9:16", "fps": 24, "duration_seconds": 17, "takes": "one continuous take, no cuts"},
+
+  "camera": {
+    "operator": "a friend standing about 2 m in front of the man, holding the phone vertical at chest height with one or two hands",
+    "movement": "always slightly alive: natural micro-shake, weight shifts, small half-steps, quick small reframes to keep the man and dog centered; never locked off, never gimbal-smooth, never a tripod",
+    "lens": "phone main camera ~24mm equivalent, deep focus",
+    "per_beat": [
+      {"time": "0-1.3s", "move": "handheld drift while he walks in; operator steadies, tiny re-centering"},
+      {"time": "1.0-1.8s", "move": "quick small reframe down-right as the dog rushes in from behind the camera and jumps up"},
+      {"time": "3.0-3.6s", "move": "operator takes a small half-step to the left as he turns his back, keeping both centered"},
+      {"time": "4.2-7.8s", "move": "mostly still but alive (breathing, micro-shake); slight tilt down following the dog as it drops to the floor"},
+      {"time": "7.8-9.7s", "move": "operator dips down a little and takes a half-step in as he turns and crouches"},
+      {"time": "9.7-13.1s", "move": "settled medium shot, small natural sway"},
+      {"time": "13.5-17s", "move": "operator drifts slightly closer, as if leaning in for the call to action"}
+    ]
+  },
+
+  "lighting": "ordinary daytime indoor light from a window at the end of the hallway plus the ceiling light; not too bright, slightly dull and flat, natural white balance, no golden-hour glow, no studio light",
+
+  "set": "the plain home hallway in the last reference image: light grey walls, white panel doors with silver handles on both sides, oak floor, beige runner rug",
+
+  "characters": {
+    "man": "EXACTLY the man in the first three reference images: bald on top with short white hair at the sides, short trimmed full white beard, ruddy weathered skin, tan canvas work shirt with rolled sleeves, brown leather suspenders crossing in an X on his back, dark jeans, brown work boots; calm, matter-of-fact trainer",
+    "dog": "EXACTLY the golden retriever in the fourth reference image"
+  },
+
+  "timeline": [
+    {"time": "0-1.3s", "action": "silence; he walks in from the far end of the hallway toward the camera and stops about 1.5 m away"},
+    {"time": "1.0-1.6s", "action": "the golden retriever rushes in from behind the camera (bottom-right of frame) and jumps up with both front paws on his stomach, its back to the camera in the foreground"},
+    {"time": "1.3-3.4s", "action": "looking into the camera, hands relaxed, not touching the dog, he says \"Dog jumps on you,\" and on \"turn your back\" calmly makes a half-turn to his left so his back faces the dog and camera, folding his arms"},
+    {"time": "4.2-6.6s", "action": "back turned, arms folded tight, head turned away, completely still; he says over his shoulder \"No eye contact. No hands.\" while the dog paws at his back"},
+    {"time": "6.6-7.8s", "action": "silence; he keeps ignoring it; the dog gives up ON ITS OWN, drops to the floor with all four paws down and sits behind him looking up; he does nothing to make this happen"},
+    {"time": "7.8-9.7s", "action": "only now he glances back, unfolds his arms, turns around and crouches to the dog's level; he says \"All four paws on the floor...\""},
+    {"time": "9.7-11.6s", "action": "crouched, he warmly rubs the dog's chest with both hands, the dog sitting in the foreground with its back to the camera, tail wagging; he says \"now he gets the love.\""},
+    {"time": "11.9-13.1s", "action": "he looks straight into the camera with a warm, knowing half-smile and asks \"Does yours jump?\""},
+    {"time": "13.1-13.5s", "action": "brief beat, smiling at the camera"},
+    {"time": "13.5-16.3s", "action": "still crouched with one hand on the dog, he quickly and casually says \"Comment PAW and I'll send you my complete free guide.\" with a small nod, briefly pointing down toward the bottom of the screen on \"Comment PAW\""},
+    {"time": "16.3-17s", "action": "he stops talking and holds a warm closed-mouth smile at the camera, silent"}
+  ],
+
+  "audio": "natural lip sync to the audio reference; he says each line exactly once and never repeats any words; quiet room tone, footsteps, dog nails on the floor; no music",
+
+  "realism_rules": "realistic human and dog anatomy and motion, correct real-world scale against the doors, five fingers per hand, hands never merge into fur, the man's face and outfit identical throughout",
+
+  "negative": "tripod, locked-off camera, gimbal glide, dolly, crane, cinematic grading, golden-hour glow, shallow depth of field, bokeh, film grain, halation, anamorphic flare, lens breathing, cuts, zoom, repeated lines, extra limbs, extra fingers, morphing face, on-screen text, subtitles, logo, watermark, music"
+}

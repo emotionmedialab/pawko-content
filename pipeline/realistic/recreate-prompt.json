@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "title": "Dog jumps on you? Turn your back.",
+    "source_reference": "reference/realistic-clip/ref-1.mp4 (reverse-engineered 2026-11-19)",
+    "purpose": "Recreate the reference beat-for-beat with OUR locked character, dog and hallway (not the reference person's likeness)",
+    "target_model": "seedance_2_5 (mode: omni_reference)",
+    "duration_seconds": 12,
+    "aspect_ratio": "9:16",
+    "frame_rate": 24,
+    "resolution_target": "720x1280 (reference is 720x1280, ~1.2 Mbps H.264 — typical Instagram re-encode)",
+    "takes": "ONE continuous take, no cuts, no edits, no zooms",
+    "genre": "UGC short-form dog-training tip, talking to camera, one tip per video"
+  },
+
+  "references": {
+    "start_image": "8e93a421-1afd-4b43-91ca-09731eae6087 (or a new start frame built from this spec)",
+    "man_front": "4f5a2760-eb90-428c-89a6-b52d22dce986",
+    "man_back": "f3f076ac-4541-42cc-9cac-661dd67dec32",
+    "man_closeup": "d8802aa2-ca83-4772-897c-fd2f8eaf7af9",
+    "dog": "105bab16-3063-4eb5-bad6-a1452f6978fc",
+    "audio": "voice/5-brian-paced.mp3 (Brian, ElevenLabs) — uploaded media e43c6afd-d46c-4b25-a492-9549460f3c00"
+  },
+
+  "camera": {
+    "device_look": "smartphone main camera, vertical, filmed by a second person (not a selfie, not a tripod)",
+    "lens_equivalent": "~24mm wide (phone 1x), slight wide-angle stretch near frame edges",
+    "height": "about chest height of a standing adult (~1.2–1.3 m), lens roughly level with the man's chest/shoulders",
+    "angle": "near eye-level, very slightly low, looking straight down the length of the space toward the doorway",
+    "position": "fixed spot in the room/hallway, ~3 m from the doorway at start; the operator does not walk",
+    "stabilization": "handheld with phone stabilization: tiny natural sway and micro-drift, no shake, no gimbal glide",
+    "framing_start": "full body of the man standing in the doorway at the far end, head in the upper third, feet near the bottom with floor visible",
+    "framing_progression": "the man walks toward the camera so the frame naturally tightens to a medium-full shot (head to knees) — achieved by subject movement, NOT by zoom",
+    "tilt_moves": [
+      {"time": "0.0–1.5s", "move": "static, slight sway"},
+      {"time": "1.5–9.0s", "move": "static medium-full framing, tiny handheld drift; camera does not follow the turn"},
+      {"time": "9.0–10.0s", "move": "gentle downward tilt (~10–15°) following the man as he crouches to the dog's level"},
+      {"time": "10.0–12.0s", "move": "settles on a medium shot: man crouched, face in upper-middle, dog's head/back in the lower foreground"}
+    ],
+    "focus": "phone deep focus — man, dog, doors and back wall all sharp, no bokeh",
+    "verticals": "door frames nearly vertical, at most a 1–2° natural lean, no dutch angle"
+  },
+
+  "lighting": {
+    "time_of_day": "late afternoon / golden hour",
+    "key_light": "low warm sunlight streaming in from a window on camera-left, out of frame, raking across the floor",
+    "floor_light": "bright warm sun patches and streaks on the wood floor in the lower-left foreground, slightly blown out",
+    "fill": "bright ambient bounce off white walls and doors; the room reads airy and bright, not moody",
+    "subject_light": "warm side light on the man's face and the dog's fur from camera-left, soft shadows on camera-right",
+    "exposure": "phone auto-exposure for the face: whites and sun patches slightly clipped, shadows lifted, mild HDR look",
+    "white_balance": "warm (sun) with slightly cooler whites in the shaded doorway",
+    "artifacts": "subtle phone sharpening, slight compression, faint flare/haze in the sun patch, no studio lights",
+    "adaptation_for_our_hallway": "keep our plain hallway but add the same low warm sun entering from a window/doorway on camera-left, creating sun patches on the oak floor and runner rug"
+  },
+
+  "set": {
+    "location": "plain home hallway (our locked set): light warm-grey/white walls, white panel doors with silver lever handles on both sides, white baseboards and trim, oak plank floor, beige runner rug, dome ceiling lights (off — daylight scene)",
+    "doorway": "the man starts framed in/near a doorway at the far end, as if he just walked in",
+    "props": "none; no furniture, no clutter, no leash, no treats in hand",
+    "reference_set_was": "a bright empty room with white six-panel doors, white trim, dark-stained wood floor, light switch on the left wall, sunlit from camera-left"
+  },
+
+  "characters": {
+    "trainer": {
+      "identity": "the exact same man as the reference images — bald on top with short white hair at the sides, short trimmed full white beard, ruddy weathered skin, hazel eyes, about 67",
+      "wardrobe": "tan canvas work shirt with sleeves rolled to the forearm, brown leather suspenders (crossing in an X on the back), dark-wash jeans, brown leather work boots",
+      "demeanor": "calm, unhurried, matter-of-fact authority; speaks straight to the camera; never raises his voice; never reacts to the jumping",
+      "body_language": "relaxed shoulders; when turned away, arms folded tight across the chest, chin turned away from the dog"
+    },
+    "dog": {
+      "identity": "the exact same golden retriever as the dog reference image — adult, medium golden coat, friendly face",
+      "behaviour_arc": "excited and jumpy → ignored → gives up and drops to four paws on its own → sits → calmly receives affection",
+      "position": "mostly in the FOREGROUND between camera and man, back/side to the camera, so we see the dog from behind looking up at him"
+    }
+  },
+
+  "blocking_and_timeline": [
+    {
+      "time": "0.0–1.2s",
+      "action": "The man walks in from the doorway at the far end toward the camera, two or three natural steps, arms loose at his sides, looking at the camera.",
+      "dog": "not yet visible",
+      "camera": "static, full body framing",
+      "dialogue": "(silence, footsteps)"
+    },
+    {
+      "time": "1.2–1.8s",
+      "action": "He slows and stops about 1.5 m from the camera.",
+      "dog": "the dog rushes in from behind the camera (enters frame from the bottom-right corner), runs to him and jumps up, both front paws on his stomach/chest, its back to the camera",
+      "camera": "static; the dog's body fills the lower-center foreground",
+      "dialogue": "(silence)"
+    },
+    {
+      "time": "1.8–3.3s",
+      "action": "Dog still up on him. He looks into the camera and speaks calmly, hands relaxed at his sides, not touching the dog.",
+      "dog": "standing on hind legs, front paws on his belly, looking up at his face",
+      "camera": "static medium-full",
+      "dialogue": "Dog jumps on you,"
+    },
+    {
+      "time": "3.3–4.6s",
+      "action": "On 'turn' he rotates to his left (camera-right) a full half-turn until his back faces the dog and the camera, folding his arms across his chest as he turns.",
+      "dog": "stays up; its paws slide from his front to his side and back",
+      "camera": "static, does not pan",
+      "dialogue": "turn your back."
+    },
+    {
+      "time": "4.6–7.2s",
+      "action": "Back fully turned to the dog and camera, arms folded tight, head turned away and slightly down. Completely still, ignoring the dog. He speaks over his shoulder without looking.",
+      "dog": "front paws on his back/lower back, pawing for attention, then starts to lose interest",
+      "camera": "static, tiny sway",
+      "dialogue": "No eye contact. No hands."
+    },
+    {
+      "time": "7.2–8.6s",
+      "action": "He stays still with his back turned and arms folded. He does NOT touch, look at or guide the dog.",
+      "dog": "gives up ON ITS OWN: drops off his back to the floor, all four paws down, then sits behind him looking up at him",
+      "camera": "static",
+      "dialogue": "(pause — let the moment breathe)"
+    },
+    {
+      "time": "8.6–9.6s",
+      "action": "Only after the dog is fully down, he glances over his shoulder, unfolds his arms and turns back around toward the dog and camera, then crouches/kneels down to the dog's level.",
+      "dog": "sitting calmly, looking up",
+      "camera": "gentle tilt down following him into the crouch",
+      "dialogue": "All four paws on the floor..."
+    },
+    {
+      "time": "9.6–11.0s",
+      "action": "Crouched in front of the dog, he warmly rubs the dog's chest and neck with both hands, smiling.",
+      "dog": "sitting in the foreground, back to camera, leaning into the rubs, tail wagging",
+      "camera": "settled medium shot, man's face upper-middle",
+      "dialogue": "now he gets the love."
+    },
+    {
+      "time": "11.0–12.0s",
+      "action": "Still crouched with a hand on the dog, he looks straight into the camera with a warm, knowing half-smile and asks the viewer.",
+      "dog": "calm, sitting",
+      "camera": "static medium shot",
+      "dialogue": "Does yours jump?"
+    }
+  ],
+
+  "dialogue": {
+    "first_line_rule": "first line must stay word-for-word: 'Dog jumps on you, turn your back.'",
+    "full_script": "Dog jumps on you, turn your back. No eye contact. No hands. All four paws on the floor... now he gets the love. Does yours jump?",
+    "delivery": "calm, low, confident, conversational; short sentences; small pauses between commands; speaks to camera except when turned away",
+    "lip_sync": "natural lip sync to the audio reference; mouth hidden/over-the-shoulder during the turned-away lines"
+  },
+
+  "audio": {
+    "voice": "on-camera dialogue from the audio reference, sounds like a phone mic in a room: slight room reverb, close and clear",
+    "ambience": "quiet indoor room tone, footsteps on wood at the start, dog nails on the floor, a soft thump when the dog jumps up and drops down, faint dog panting",
+    "music": "none in the generated video (music, if any, is added in post)"
+  },
+
+  "on_screen_text_post_production_only": {
+    "note": "DO NOT generate text in the video. Added afterwards with ffmpeg.",
+    "hook_box": {"text": "DOG JUMPS ON YOU?", "style": "white bold sans-serif uppercase on a dark grey semi-transparent rounded rectangle", "position": "top-left, ~4% from the top, ~5% from the left", "timing": "entire video"},
+    "keyword_captions": [
+      {"text": "DOG JUMPS ON", "time": "1.8–3.0s"},
+      {"text": "YOU", "time": "3.0–3.5s"},
+      {"text": "TURN YOUR BACK", "time": "3.5–4.8s"},
+      {"text": "NO EYE CONTACT", "time": "4.8–6.2s"},
+      {"text": "NO HANDS", "time": "6.2–9.0s"},
+      {"text": "FOUR PAWS DOWN", "time": "9.0–10.3s"},
+      {"text": "NOW HE GETS THE LOVE", "time": "10.3–11.2s"},
+      {"text": "DOES YOURS JUMP?", "time": "11.2–12.0s"}
+    ],
+    "keyword_style": "large bold condensed sans-serif uppercase, bright yellow fill (#FFD400) with a thick black outline and soft drop shadow, centered horizontally, ~58–62% from the top, never over the face",
+    "brand_tag": {"lines": ["PAWKO APP", "LINK IN BIO"], "style": "line 1 black bold text on a small yellow box; line 2 small white text on a small black box directly below", "position": "left side, ~68% from the top", "timing": "from 1.8s to the end"}
+  },
+
+  "realism_rules": [
+    "looks like a real phone video filmed by a friend, not an ad",
+    "no cinematic color grading, no film look, no shallow depth of field",
+    "natural, slightly imperfect handheld framing",
+    "correct real-world scale: standing man's head ~85% of door height; crouched head ~half the door height",
+    "realistic dog anatomy and physics: four legs, weight shifts, paws make contact, fur reacts",
+    "five fingers per hand, hands never merge into fur or clothing",
+    "the man's face and outfit stay identical for the whole clip"
+  ],
+
+  "negative_prompt": "cuts, jump cuts, zoom, camera pan following the turn, tripod-perfect stillness, gimbal glide, cinematic lighting, studio lights, moody dark scene, shallow depth of field, bokeh, dutch angle, tilted horizon, man guiding or pushing the dog down, man looking at the dog while it jumps, extra limbs, extra fingers, merged hands and fur, morphing face, changing clothes, warped doors, floating dog, on-screen text, subtitles, logos, watermark, music",
+
+  "seedance_prompt_compiled": "One continuous handheld vertical phone video, no cuts, filmed by a friend at chest height from a fixed spot in a plain home hallway (light grey walls, white panel doors with silver handles on both sides, oak floor, beige runner rug). Late-afternoon golden sun streams in low from camera-left, making warm sun patches on the floor; bright airy daylight, slightly blown highlights, phone deep focus, no cinematic grading. The same bald man with a short white beard, tan work shirt, brown leather suspenders, dark jeans and work boots (reference images) walks in from the doorway at the far end toward the camera and stops about 1.5 m away. At 1.2s the same golden retriever (reference image) rushes in from behind the camera, entering from the bottom-right, and jumps up with both front paws on his stomach, its back to the camera in the foreground. Looking into the camera, hands relaxed at his sides, he says \"Dog jumps on you,\" and on \"turn your back\" he calmly makes a half-turn to his left so his back faces the dog and camera, folding his arms. With his back turned, arms folded, head turned away, he says over his shoulder \"No eye contact. No hands.\" while the dog paws at his back. He stays completely still and ignores it; at about 7.5s the dog gives up on its own, drops to the floor with all four paws down and sits looking up at him. Only then does he glance back, unfold his arms, turn around and crouch to the dog's level as the camera tilts gently down; he says \"All four paws on the floor... now he gets the love\" while warmly rubbing the dog's chest with both hands, the dog sitting in the foreground with its back to the camera. Finally he looks straight into the camera with a warm, knowing half-smile and asks \"Does yours jump?\" Natural lip sync to the audio reference. Realistic anatomy and scale, five fingers per hand, identical face throughout. No text, no subtitles, no logo, no music."
+}
