@@ -7,7 +7,7 @@ Sources: `README.md` ("0. Install the tools"), `PLAYBOOK-DOG-APP.md` (section 1,
 
 ```bash
 git clone https://github.com/emotionmedialab/pawko-content.git cartoon-short-kit
-cd cartoon-short-kit && git checkout pawko
+cd cartoon-short-kit
 ```
 - Git holds the code and docs only. **Big media comes from the Drive folder:** reference reels, voices/music/SFX (`*.mp3`, `*.wav`), finals (`*.mp4`), the realistic character images.
 - Open `cartoon-short-kit/` as the project folder in Claude Code (that is where `/pawko-video` lives).
@@ -25,13 +25,14 @@ cd cartoon-short-kit && git checkout pawko
 
 ## 3. Restore the files git leaves out (per project you open)
 
-`.gitignore` skips each project's `web/models/` and `web/lib/three.module.js`. Restore them from the kit (same sources as `tools/setup.sh`):
+`.gitignore` skips each project's `web/models/`, `web/lib/three.module.js` and `out/`. Restore them from the kit (same sources as `tools/setup.sh`):
 ```bash
 P=example/<slug>
 cp -r characters/puppy-3d/models "$P/web/"
-npm pack three@0.160.0 --pack-destination "$TEMP" && tar xzf "$TEMP/three-0.160.0.tgz" -C "$TEMP"
-mkdir -p "$P/web/lib" && cp "$TEMP/package/build/three.module.js" "$P/web/lib/"
+T=$(mktemp -d) && (cd "$T" && npm pack three@0.160.0 && tar xzf three-0.160.0.tgz)
+mkdir -p "$P/web/lib" "$P/out" && cp "$T/package/build/three.module.js" "$P/web/lib/"
 ```
+(`tar` with a `C:\...` path fails in Git Bash, hence the `cd`. `finish.sh` fails without `out/`.)
 Then link Playwright into the project: on Mac `mkdir -p $P/node_modules && ln -s "$(npm root -g)/playwright" $P/node_modules/playwright`; on Windows see below.
 
 ## 4. Windows-only fixes (from the PLAYBOOK; skip on Mac)
@@ -58,9 +59,20 @@ Then link Playwright into the project: on Mac `mkdir -p $P/node_modules && ln -s
 In Git Bash, from the kit root, after step 3 for `example/redo-parts`:
 ```bash
 cd example/redo-parts
-HASH="#h" GPU=1 node render.mjs "$TEMP/pawko-test-render" "0-60" 6
+HASH="#h" GPU=1 node render.mjs stills/setup-test "0-60" 6
 ```
-- Expect `done 11 frames` and JPGs of the puppy pose gallery in `$TEMP/pawko-test-render/` (Nel's machine: ~0.1–0.9 s/frame on GPU).
+- Expect `done 11 frames` and JPGs of the puppy pose gallery in `stills/setup-test/` (Nel's machine: ~0.1–0.9 s/frame on GPU).
 - Drop `GPU=1` if it fails: the CPU path (SwiftShader) works on any machine, just slower.
 - Then check ffmpeg and transcription: `ffmpeg -version` and `py -c "import faster_whisper, numpy, PIL"`.
-- Delete `$TEMP/pawko-test-render/` afterwards.
+- Delete `stills/setup-test/` afterwards.
+
+## 7. Full test: re-render Heatstroke
+
+After step 3 for `example/heatstroke`, copy the Drive folder's `example/heatstroke/*` (voice, CTA, music, SFX) into `example/heatstroke/`, then in Git Bash:
+```bash
+cd example/heatstroke
+bash voice_v3.sh && py audio.py && py mix.py voice_v3.wav music.wav sfx.wav
+SHOTS=1 GPU=1 node render.mjs frames "0-1686"      # ~3 min on GPU
+bash finish.sh "Heatstroke"                         # -> out/Heatstroke.mp4, 56.23 s, about -14.6 LUFS
+```
+Compare it with the delivered `Heatstroke_v4.mp4`: same length and loudness, frames look the same (tested 2026-11-25: SSIM 0.995).
