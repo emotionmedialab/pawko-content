@@ -17,7 +17,7 @@ New machine? Do `SETUP.md` once. In Claude Code, run `/pawko-video new <row>` or
 
 | # | Step | Cartoon lane | Realistic lane |
 |---|---|---|---|
-| 1 | **Claim** | Pick a row from the "Videos to Redo Pawko" sheet (green rows), or the hooks/formats that performed in the tracker. Fill "Builder" (name + date) first so two people never build the same row. | same |
+| 1 | **Claim** | Pick a **green** row (green = approved to make; the shade doesn't matter) from James's ["Videos to Redo Pawko" sheet](https://docs.google.com/spreadsheets/d/1Z3wrKaSvrv6-7nDRYcMHl1WxzV9xxoYEU41pglR0iwE), or the hooks/formats that performed in the tracker. Fill "Builder" (name + date) first so two people never build the same row. | same |
 | 2 | **Reference** | Download the IG reel into `<video folder>/reference/`. Claude transcribes it (`transcribe.py`). | same |
 | 3 | **Script** | Line 1 copied **word for word** from the original. About 3.7 words/s. Ends with "Comment PAW and I'll send you my complete dog training guide." **Builder approves.** | same |
 | 4 | **Voice** | ElevenLabs "Holden", saved as `voice.mp3`. The CTA reuses `cta-comment-paw.mp3` (in `example/heatstroke/`, from Drive). | ElevenLabs "Brian – Relatable Everyman". Claude paces the pauses and adds 1.3 s of lead silence. **Never clone the voice into Higgsfield** (ToS). |

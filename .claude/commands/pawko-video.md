@@ -22,7 +22,7 @@ If `brief.md` already exists there, read its **Status:** line and the latest `wo
 
 Copy `pipeline/Brief_template.md` into the video folder as `brief.md`; update its **Status:** line at every step.
 
-1. **Claim** — fill the brief from the row (source URL, hook, angle); cite the tracker hooks/formats that performed if the builder pastes them in.
+1. **Claim** — the row must be **green** in James's "Videos to Redo Pawko" sheet (https://docs.google.com/spreadsheets/d/1Z3wrKaSvrv6-7nDRYcMHl1WxzV9xxoYEU41pglR0iwE); fill the brief from it (source URL, hook, angle); cite the tracker hooks/formats that performed if the builder pastes them in.
 2. **Reference** — the builder downloads the IG reel into `reference/`. Transcribe it with `transcribe.py`.
 3. **Script** — line 1 word for word, ~3.7 words/s, ends with the Comment PAW CTA. **STOP: builder approves.**
 4. **Voice** — the builder generates it in ElevenLabs (cartoon: Holden; realistic: Brian). Never call ElevenLabs or Higgsfield yourself. Realistic: pace the pauses + add 1.3 s lead silence.

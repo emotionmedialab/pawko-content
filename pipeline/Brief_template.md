@@ -5,7 +5,7 @@
 
 - **Builder (signs off every step):** <David / Nel / James>
 - **Lane:** cartoon / realistic
-- **Source row:** "Videos to Redo Pawko" sheet, row <N>
+- **Source row:** ["Videos to Redo Pawko" sheet](https://docs.google.com/spreadsheets/d/1Z3wrKaSvrv6-7nDRYcMHl1WxzV9xxoYEU41pglR0iwE), row <N> (green = approved to make)
 - **Source URL:** <instagram.com/reel/...>
 - **Reference file:** `reference/<file>.mp4` + transcript
 - **Hook (line 1, word for word from the original):** "<...>"

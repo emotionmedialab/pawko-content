@@ -52,7 +52,7 @@ Then link Playwright into the project: on Mac `mkdir -p $P/node_modules && ln -s
 
 - **Higgsfield:** the shared credit account (Ultra plan). Log every spend in the tracker; cap ≈ 240 cr per realistic video.
 - **ElevenLabs:** voices "Holden" (cartoon narrator) and "Brian – Relatable Everyman" (realistic trainer). Never clone a voice into Higgsfield.
-- **Google Drive:** write access to the PawkoMarketing folder (delivery + media), and edit access to the tracker sheet.
+- **Google Drive:** write access to the PawkoMarketing folder (delivery + media), and edit access to the tracker sheet. View access to James's "Videos to Redo Pawko" sheet (ideas; green row = approved to make): https://docs.google.com/spreadsheets/d/1Z3wrKaSvrv6-7nDRYcMHl1WxzV9xxoYEU41pglR0iwE
 
 ## 6. First test: render an existing example
 
